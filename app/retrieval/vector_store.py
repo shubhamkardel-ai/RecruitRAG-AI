@@ -12,6 +12,7 @@ class VectorStore:
     - Collection creation
     - Vector insertion
     - Vector search
+    - Vector counting
     """
 
     def __init__(
@@ -19,14 +20,19 @@ class VectorStore:
         collection_name: str = "recruitrag_documents",
         vector_size: int = 384,
         path: str = "qdrant_data",
-        client: QdrantClient | None = None,
+        client=None,
     ):
         self.collection_name = collection_name
         self.vector_size = vector_size
 
         # Reuse an existing Qdrant client when provided.
-        # Otherwise create a local client.
-        self.client = client or QdrantClient(path=path)
+        if client is not None:
+            self.client = client
+        else:
+            self.client = QdrantClient(
+                path=path,
+                force_disable_check_same_thread=True,
+            )
 
         self._create_collection()
 
@@ -66,6 +72,10 @@ class VectorStore:
         if not embeddings:
             return
 
+        # Get the current number of vectors.
+        # New documents will receive new IDs.
+        current_count = self.count()
+
         points = []
 
         for index, (embedding, payload) in enumerate(
@@ -73,7 +83,7 @@ class VectorStore:
         ):
             points.append(
                 PointStruct(
-                    id=index,
+                    id=current_count + index,
                     vector=embedding,
                     payload=payload,
                 )
@@ -94,7 +104,9 @@ class VectorStore:
         """
 
         if not query_vector:
-            raise ValueError("Query vector cannot be empty.")
+            raise ValueError(
+                "Query vector cannot be empty."
+            )
 
         return self.client.query_points(
             collection_name=self.collection_name,
