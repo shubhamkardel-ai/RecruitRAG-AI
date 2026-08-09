@@ -19,14 +19,14 @@ class VectorStore:
         collection_name: str = "recruitrag_documents",
         vector_size: int = 384,
         path: str = "qdrant_data",
+        client: QdrantClient | None = None,
     ):
         self.collection_name = collection_name
         self.vector_size = vector_size
 
-        # Local Qdrant storage.
-        # This keeps development simple without requiring
-        # a separate Qdrant server.
-        self.client = QdrantClient(path=path)
+        # Reuse an existing Qdrant client when provided.
+        # Otherwise create a local client.
+        self.client = client or QdrantClient(path=path)
 
         self._create_collection()
 

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+from qdrant_client import QdrantClient
+
 from app.retrieval.embeddings import EmbeddingService
 from app.retrieval.vector_store import VectorStore
 
@@ -18,9 +20,12 @@ class Retriever:
     Retrieves the most relevant document chunks from Qdrant.
     """
 
-    def __init__(self):
+    def __init__(self, client: QdrantClient | None = None):
         self.embedding_service = EmbeddingService()
-        self.vector_store = VectorStore()
+
+        self.vector_store = VectorStore(
+            client=client
+        )
 
     def retrieve(
         self,

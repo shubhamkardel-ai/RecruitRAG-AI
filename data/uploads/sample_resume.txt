@@ -1,0 +1,21 @@
+SHUBHAM KARDEL
+
+AI/ML Engineer
+
+Skills:
+Python, Machine Learning, FastAPI, LangChain, RAG, Qdrant, PyTorch, SQL.
+
+Experience:
+Built AI-powered applications using Python and machine learning.
+Developed a Resume Analyzer AI system for ATS scoring and job matching.
+Developed an intelligent RAG-based chatbot architecture for document retrieval.
+
+Education:
+Master of Computer Applications with specialization in Artificial Intelligence and Data Science.
+
+Projects:
+Resume Analyzer AI
+AegisAI Intelligent Radar Surveillance System
+RecruitRAG-AI
+
+The candidate has experience building practical AI and machine learning applications with Python.

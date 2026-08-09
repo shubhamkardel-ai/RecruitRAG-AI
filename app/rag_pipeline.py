@@ -1,3 +1,5 @@
+from qdrant_client import QdrantClient
+
 from app.retrieval.retriever import Retriever
 from app.generation.response_generator import ResponseGenerator
 
@@ -20,9 +22,17 @@ class RAGPipeline:
         Final Answer
     """
 
-    def __init__(self, top_k: int = 5):
-        self.retriever = Retriever()
+    def __init__(
+        self,
+        client: QdrantClient,
+        top_k: int = 5,
+    ):
+        self.retriever = Retriever(
+            client=client
+        )
+
         self.response_generator = ResponseGenerator()
+
         self.top_k = top_k
 
     def ask(self, query: str) -> str:
