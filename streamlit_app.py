@@ -1,5 +1,8 @@
+import os
 import requests
 import streamlit as st
+
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(
     page_title="RecruitRAG-AI",
@@ -34,7 +37,7 @@ if uploaded_file is not None:
 
         try:
             response = requests.post(
-                "http://127.0.0.1:8000/documents/upload",
+                f"{API_URL}/documents/upload",
                 files={
                     "file": (
                         uploaded_file.name,
@@ -89,7 +92,7 @@ if st.button("🔍 Ask RecruitRAG-AI"):
         try:
 
             response = requests.post(
-                "http://127.0.0.1:8000/ask",
+                f"{API_URL}/ask",
                 json={
                     "question": question
                 },
