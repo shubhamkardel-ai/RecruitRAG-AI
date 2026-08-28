@@ -16,10 +16,10 @@ app = FastAPI(
 # Shared Qdrant Client
 # ==========================================================
 
-if settings.qdrant_url and settings.qdrant_api_key:
+if settings.qdrant_url:
     qdrant_client = QdrantClient(
         url=settings.qdrant_url,
-        api_key=settings.qdrant_api_key,
+        api_key=settings.qdrant_api_key or None,
     )
 else:
     qdrant_client = QdrantClient(
