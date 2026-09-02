@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from qdrant_client import QdrantClient
 
 from app.config import settings
 from app.rag_pipeline import RAGPipeline
 from app.api.routes.documents import create_document_router
+from app.api.routes.chat import create_chat_router
+
 
 app = FastAPI(
     title="RecruitRAG-AI",
@@ -46,11 +47,14 @@ documents_router = create_document_router(
 app.include_router(documents_router)
 
 # ==========================================================
-# Request Model
+# Chat Routes
 # ==========================================================
 
-class AskRequest(BaseModel):
-    question: str
+chat_router = create_chat_router(
+    pipeline=pipeline
+)
+
+app.include_router(chat_router)
 
 # ==========================================================
 # Root
@@ -71,19 +75,4 @@ def root():
 def health():
     return {
         "status": "ok",
-    }
-
-# ==========================================================
-# Ask
-# ==========================================================
-
-@app.post("/ask")
-def ask(request: AskRequest):
-    answer = pipeline.ask(
-        request.question
-    )
-
-    return {
-        "question": request.question,
-        "answer": answer,
     }

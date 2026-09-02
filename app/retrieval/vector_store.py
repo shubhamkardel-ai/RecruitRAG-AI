@@ -1,4 +1,5 @@
 from typing import Any
+import hashlib
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
@@ -55,6 +56,35 @@ class VectorStore:
                 ),
             )
 
+    def _generate_point_id(
+        self,
+        payload: dict[str, Any],
+    ) -> int:
+        """
+        Generate a deterministic Qdrant point ID.
+
+        The same source + chunk_id always produces
+        the same ID, preventing duplicate vectors
+        when a document is uploaded again.
+        """
+
+        source = str(
+            payload.get("source", "unknown")
+        )
+
+        chunk_id = str(
+            payload.get("chunk_id", 0)
+        )
+
+        unique_key = f"{source}:{chunk_id}"
+
+        hash_value = hashlib.sha256(
+            unique_key.encode("utf-8")
+        ).hexdigest()
+
+        # Qdrant integer IDs must fit within uint64.
+        return int(hash_value[:16], 16)
+
     def add_documents(
         self,
         embeddings: list[list[float]],
@@ -62,6 +92,9 @@ class VectorStore:
     ) -> None:
         """
         Store document embeddings and metadata in Qdrant.
+
+        Existing chunks with the same source and chunk_id
+        are automatically replaced instead of duplicated.
         """
 
         if len(embeddings) != len(payloads):
@@ -72,18 +105,19 @@ class VectorStore:
         if not embeddings:
             return
 
-        # Get the current number of vectors.
-        # New documents will receive new IDs.
-        current_count = self.count()
-
         points = []
 
-        for index, (embedding, payload) in enumerate(
-            zip(embeddings, payloads)
+        for embedding, payload in zip(
+            embeddings,
+            payloads,
         ):
+            point_id = self._generate_point_id(
+                payload
+            )
+
             points.append(
                 PointStruct(
-                    id=current_count + index,
+                    id=point_id,
                     vector=embedding,
                     payload=payload,
                 )
@@ -100,7 +134,8 @@ class VectorStore:
         limit: int = 5,
     ):
         """
-        Search Qdrant for the most semantically similar chunks.
+        Search Qdrant for the most semantically
+        similar chunks.
         """
 
         if not query_vector:

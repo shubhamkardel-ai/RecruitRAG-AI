@@ -17,8 +17,8 @@ def normalize_text(text: str) -> str:
     text = text.replace("\r\n", "\n")
     text = text.replace("\r", "\n")
 
-    # Remove control characters except newline and tab
-    text = re.sub(r"[^\x09\x0A\x20-\x7E]", " ", text)
+    # Remove control characters while preserving Unicode text.
+    text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", " ", text)
 
     # Remove excessive spaces
     text = re.sub(r"[ \t]+", " ", text)
