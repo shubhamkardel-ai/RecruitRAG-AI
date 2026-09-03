@@ -1,0 +1,11 @@
+.venv/
+qdrant_data/
+__pycache__/
+.git/
+.idea/
+.env
+*.pyc
+.pytest_cache/
+data/raw/
+data/processed/
+data/uploads/
