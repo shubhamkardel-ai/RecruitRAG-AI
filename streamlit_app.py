@@ -2,7 +2,19 @@ import os
 import requests
 import streamlit as st
 
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+
+# ==========================================================
+# Configuration
+# ==========================================================
+
+API_URL = os.getenv(
+    "API_URL",
+    "http://127.0.0.1:8000"
+)
+
+# ==========================================================
+# Page Configuration
+# ==========================================================
 
 st.set_page_config(
     page_title="RecruitRAG-AI",
@@ -10,112 +22,359 @@ st.set_page_config(
     layout="wide",
 )
 
+
+# ==========================================================
+# Application Header
+# ==========================================================
+
 st.title("🤖 RecruitRAG-AI")
-st.subheader("AI-Powered Recruitment RAG System")
 
-st.write(
-    "Upload a candidate resume and ask questions "
-    "using Retrieval-Augmented Generation."
+st.subheader("⚡ AI-Powered Recruitment Intelligence Platform")
+
+st.caption(
+    "AI-powered recruitment intelligence • "
+    "Resume understanding • Candidate evaluation"
 )
 
 st.divider()
 
+status_col1, status_col2, status_col3 = st.columns(3)
+
+with status_col1:
+
+    try:
+
+        health_response = requests.get(
+            f"{API_URL}/health",
+            timeout=5,
+        )
+
+        if health_response.status_code == 200:
+            st.success("🟢 API Connected")
+        else:
+            st.error("🔴 API Offline")
+
+    except requests.exceptions.RequestException:
+
+        st.error("🔴 API Offline")
+
+with status_col2:
+    st.info("🔵 RAG Engine Active")
+
+with status_col3:
+    st.info("🔵 AI Assistant Active")
+
+st.divider()
+
 # ==========================================================
-# Resume Upload
+# Recruiter Workspace
 # ==========================================================
 
-st.header("📄 Upload Candidate Resume")
-
-uploaded_file = st.file_uploader(
-    "Upload PDF, DOCX, or TXT",
-    type=["pdf", "docx", "txt"],
+left_col, right_col = st.columns(
+    [1, 1.4],
+    gap="large",
 )
 
-if uploaded_file is not None:
 
-    if st.button("📥 Index Resume"):
+# ==========================================================
+# Candidate Resume
+# ==========================================================
 
-        try:
-            response = requests.post(
-                f"{API_URL}/documents/upload",
-                files={
-                    "file": (
-                        uploaded_file.name,
-                        uploaded_file.getvalue(),
+with left_col:
+
+    st.subheader("📄 AI-Powered Resume Analysis")
+
+    st.caption(
+        "Upload a candidate resume to unlock AI-powered recruitment insights."
+    )
+
+    uploaded_file = st.file_uploader(
+        "📎 Drop candidate resume here",
+        type=["pdf", "docx", "txt"],
+        help="Supported formats: PDF, DOCX, TXT",
+    )
+
+    if uploaded_file is not None:
+
+        st.success(
+            f"Resume ready: {uploaded_file.name}"
+        )
+
+        file_size_kb = uploaded_file.size / 1024
+
+        st.caption(
+            f"File type: {uploaded_file.type} • "
+            f"Size: {file_size_kb:.1f} KB"
+        )
+
+        if st.button(
+                "🚀 Index Resume",
+                use_container_width=True,
+                type="primary",
+        ):
+
+            try:
+
+                with st.spinner(
+                        "Processing resume..."
+                ):
+
+                    response = requests.post(
+                        f"{API_URL}/documents/upload",
+                        files={
+                            "file": (
+                                uploaded_file.name,
+                                uploaded_file.getvalue(),
+                            )
+                        },
+                        timeout=120,
                     )
-                },
-                timeout=120,
-            )
 
-            if response.status_code == 200:
+                if response.status_code == 200:
 
-                data = response.json()
+                    data = response.json()
 
-                st.success(
-                    f"✅ {uploaded_file.name} indexed successfully!"
-                )
+                    st.success(
+                        "✅ Resume indexed successfully."
+                    )
 
-                st.json(data)
+                    if st.button(
+                            "✨ Generate AI Candidate Summary",
+                            use_container_width=True,
+                    ):
 
-            else:
+                        try:
+
+                            with st.spinner(
+                                    "Generating AI candidate summary..."
+                            ):
+
+                                summary_response = requests.post(
+                                    f"{API_URL}/chat/ask",
+                                    json={
+                                        "question": (
+                                            "Generate a professional recruiter-ready candidate summary. "
+                                            "Include candidate overview, experience, technical skills, "
+                                            "projects, education, key strengths, potential gaps, "
+                                            "recommended role, and overall recruiter assessment. "
+                                            "Use only information available in the uploaded resume."
+                                        )
+                                    },
+                                    timeout=120,
+                                )
+
+                            if summary_response.status_code == 200:
+
+                                summary_data = summary_response.json()
+
+                                st.subheader(
+                                    "✨ AI Candidate Summary"
+                                )
+
+                                st.info(
+                                    summary_data["answer"]
+                                )
+
+                            else:
+
+                                st.error(
+                                    f"Summary generation failed: {summary_response.status_code}"
+                                )
+
+                        except requests.exceptions.ConnectionError:
+
+                            st.error(
+                                "FastAPI is not running."
+                            )
+
+                        except requests.exceptions.Timeout:
+
+                            st.error(
+                                "The summary request timed out."
+                            )
+
+                    if st.button(
+                            "✨ Generate AI Candidate Summary",
+                            use_container_width=True,
+                    ):
+
+                        try:
+
+                            with st.spinner(
+                                    "Generating AI candidate summary..."
+                            ):
+
+                                response = requests.post(
+                                    f"{API_URL}/chat/ask",
+                                    json={
+                                        "question": (
+                                            "Provide a concise recruiter-focused summary "
+                                            "of this candidate, including their background, "
+                                            "technical skills, projects, experience, and "
+                                            "overall strengths."
+                                        )
+                                    },
+                                    timeout=120,
+                                )
+
+                            if response.status_code == 200:
+
+                                data = response.json()
+
+                                st.subheader("✨ AI Candidate Summary")
+
+                                st.info(
+                                    data["answer"]
+                                )
+
+                            else:
+
+                                st.error(
+                                    f"API error: {response.status_code}"
+                                )
+
+                        except requests.exceptions.RequestException:
+
+                            st.error(
+                                "Unable to generate candidate summary."
+                            )
+
+                else:
+
+                    st.error(
+                        f"Upload failed: {response.status_code}"
+                    )
+
+            except requests.exceptions.ConnectionError:
+
                 st.error(
-                    f"Upload failed: {response.status_code}"
+                    "FastAPI is not running."
                 )
 
-        except requests.exceptions.ConnectionError:
-            st.error(
-                "FastAPI is not running. "
-                "Please start the backend first."
-            )
+            except requests.exceptions.Timeout:
+
+                st.error(
+                    "The upload request timed out."
+                )
+
 
 # ==========================================================
-# Question Answering
+# Recruiter Intelligence
 # ==========================================================
 
-st.divider()
+with right_col:
 
-st.header("💬 Ask RecruitRAG-AI")
+    st.subheader("💬 Recruiter Intelligence")
 
-question = st.text_input(
-    "Enter your question",
-    placeholder="What AI projects has the candidate built?",
-)
+    st.caption(
+        "Ask natural-language questions about the candidate."
+    )
 
-if st.button("🔍 Ask RecruitRAG-AI"):
+    analysis_mode = st.selectbox(
+        "AI Analysis Mode",
+        [
+            "Recruiter Q&A",
+            "Candidate Strengths",
+            "Technical Skills",
+            "Project Experience",
+            "Recruiter Recommendation",
+            "Interview Focus Areas",
+        ],
+    )
 
-    if not question.strip():
+    if analysis_mode == "Recruiter Q&A":
 
-        st.warning("Please enter a question.")
+        question = st.text_area(
+            "Recruiter Question",
+            placeholder="Ask anything about the candidate...",
+            height=100,
+        )
 
     else:
 
-        try:
+        question = st.text_area(
+            "Recruiter Question",
+            value=f"Analyze the candidate's {analysis_mode.lower()}.",
+            height=100,
+        )
 
-            response = requests.post(
-                f"{API_URL}/chat/ask",
-                json={
-                    "question": question
-                },
-                timeout=120,
+    st.caption(
+        "Try asking:"
+    )
+
+    st.write(
+        "• What are the candidate's strongest technical skills?\n"
+        "• What AI/ML projects has the candidate built?\n"
+        "• Does the candidate have Python experience?"
+    )
+
+    if st.button(
+            "🧠 Analyze Candidate",
+            use_container_width=True,
+            type="primary",
+    ):
+
+        if not question.strip():
+
+            st.warning(
+                "Please enter a question."
             )
 
-            if response.status_code == 200:
+        else:
 
-                data = response.json()
+            try:
 
-                st.success("Answer")
+                with st.spinner(
+                    "Analyzing candidate..."
+                ):
 
-                st.write(data["answer"])
+                    response = requests.post(
+                        f"{API_URL}/chat/ask",
+                        json={
+                            "question": (
+                                f"AI Analysis Mode: {analysis_mode}\n\n"
+                                f"Recruiter Question: {question}"
+                            )
+                        },
+                        timeout=120,
+                    )
 
-            else:
+                if response.status_code == 200:
+
+                    data = response.json()
+
+                    st.subheader(
+                        f"🎯 AI {analysis_mode} Insight"
+                    )
+
+                    st.info(
+                        data["answer"]
+                    )
+
+                else:
+
+                    st.error(
+                        f"API error: {response.status_code}"
+                    )
+
+            except requests.exceptions.ConnectionError:
 
                 st.error(
-                    f"API error: {response.status_code}"
+                    "FastAPI is not running."
                 )
 
-        except requests.exceptions.ConnectionError:
+            except requests.exceptions.Timeout:
 
-            st.error(
-                "FastAPI is not running. "
-                "Please start the backend first."
-            )
+                st.error(
+                    "The request timed out."
+                )
+
+# ==========================================================
+# Footer
+# ==========================================================
+
+st.divider()
+
+st.caption(
+    "RecruitRAG-AI · Intelligent Resume Screening & Candidate Insights"
+)
