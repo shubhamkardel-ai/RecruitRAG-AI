@@ -2,9 +2,7 @@
 uvicorn
 streamlit
 qdrant-client
-sentence-transformers
-torch
-transformers
+fastembed
 groq
 python-dotenv
 pydantic

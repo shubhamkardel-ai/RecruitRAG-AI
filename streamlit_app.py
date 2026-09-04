@@ -92,7 +92,7 @@ if st.button("🔍 Ask RecruitRAG-AI"):
         try:
 
             response = requests.post(
-                f"{API_URL}/ask",
+                f"{API_URL}/chat/ask",
                 json={
                     "question": question
                 },
