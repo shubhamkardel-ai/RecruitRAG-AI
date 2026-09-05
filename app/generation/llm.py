@@ -30,10 +30,10 @@ class LLMService:
         )
 
     def generate(
-        self,
-        prompt: str,
-        temperature: float = 0.2,
-        max_tokens: int = 1024,
+            self,
+            prompt: str,
+            temperature: float = 0.2,
+            max_tokens: int = 2048,
     ) -> str:
         """
         Generate a response using the configured Groq model.

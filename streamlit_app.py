@@ -22,6 +22,8 @@ st.set_page_config(
     layout="wide",
 )
 
+if "resume_indexed" not in st.session_state:
+    st.session_state.resume_indexed = False
 
 # ==========================================================
 # Application Header
@@ -107,17 +109,19 @@ with left_col:
             f"Size: {file_size_kb:.1f} KB"
         )
 
+        # --------------------------------------------------
+        # Index Resume
+        # --------------------------------------------------
+
         if st.button(
-                "🚀 Index Resume",
-                use_container_width=True,
-                type="primary",
+            "🚀 Index Resume",
+            use_container_width=True,
+            type="primary",
         ):
 
             try:
 
-                with st.spinner(
-                        "Processing resume..."
-                ):
+                with st.spinner("Processing resume..."):
 
                     response = requests.post(
                         f"{API_URL}/documents/upload",
@@ -132,112 +136,11 @@ with left_col:
 
                 if response.status_code == 200:
 
-                    data = response.json()
-
                     st.success(
                         "✅ Resume indexed successfully."
                     )
 
-                    if st.button(
-                            "✨ Generate AI Candidate Summary",
-                            use_container_width=True,
-                    ):
-
-                        try:
-
-                            with st.spinner(
-                                    "Generating AI candidate summary..."
-                            ):
-
-                                summary_response = requests.post(
-                                    f"{API_URL}/chat/ask",
-                                    json={
-                                        "question": (
-                                            "Generate a professional recruiter-ready candidate summary. "
-                                            "Include candidate overview, experience, technical skills, "
-                                            "projects, education, key strengths, potential gaps, "
-                                            "recommended role, and overall recruiter assessment. "
-                                            "Use only information available in the uploaded resume."
-                                        )
-                                    },
-                                    timeout=120,
-                                )
-
-                            if summary_response.status_code == 200:
-
-                                summary_data = summary_response.json()
-
-                                st.subheader(
-                                    "✨ AI Candidate Summary"
-                                )
-
-                                st.info(
-                                    summary_data["answer"]
-                                )
-
-                            else:
-
-                                st.error(
-                                    f"Summary generation failed: {summary_response.status_code}"
-                                )
-
-                        except requests.exceptions.ConnectionError:
-
-                            st.error(
-                                "FastAPI is not running."
-                            )
-
-                        except requests.exceptions.Timeout:
-
-                            st.error(
-                                "The summary request timed out."
-                            )
-
-                    if st.button(
-                            "✨ Generate AI Candidate Summary",
-                            use_container_width=True,
-                    ):
-
-                        try:
-
-                            with st.spinner(
-                                    "Generating AI candidate summary..."
-                            ):
-
-                                response = requests.post(
-                                    f"{API_URL}/chat/ask",
-                                    json={
-                                        "question": (
-                                            "Provide a concise recruiter-focused summary "
-                                            "of this candidate, including their background, "
-                                            "technical skills, projects, experience, and "
-                                            "overall strengths."
-                                        )
-                                    },
-                                    timeout=120,
-                                )
-
-                            if response.status_code == 200:
-
-                                data = response.json()
-
-                                st.subheader("✨ AI Candidate Summary")
-
-                                st.info(
-                                    data["answer"]
-                                )
-
-                            else:
-
-                                st.error(
-                                    f"API error: {response.status_code}"
-                                )
-
-                        except requests.exceptions.RequestException:
-
-                            st.error(
-                                "Unable to generate candidate summary."
-                            )
+                    st.session_state.resume_indexed = True
 
                 else:
 
@@ -257,7 +160,69 @@ with left_col:
                     "The upload request timed out."
                 )
 
+        # --------------------------------------------------
+        # AI Candidate Summary
+        # --------------------------------------------------
 
+        if st.session_state.resume_indexed:
+
+            if st.button(
+                "✨ Generate AI Candidate Summary",
+                use_container_width=True,
+            ):
+
+                try:
+
+                    with st.spinner(
+                        "Generating AI candidate summary..."
+                    ):
+
+                        summary_response = requests.post(
+                            f"{API_URL}/chat/ask",
+                            json={
+                                "question": (
+                                    "Generate a professional recruiter-ready "
+                                    "candidate summary. Include candidate "
+                                    "overview, experience, technical skills, "
+                                    "projects, education, key strengths, "
+                                    "potential gaps, recommended role, and "
+                                    "overall recruiter assessment. Use only "
+                                    "information available in the uploaded resume."
+                                )
+                            },
+                            timeout=120,
+                        )
+
+                    if summary_response.status_code == 200:
+
+                        summary_data = summary_response.json()
+
+                        st.subheader(
+                            "✨ AI Candidate Summary"
+                        )
+
+                        st.info(
+                            summary_data["answer"]
+                        )
+
+                    else:
+
+                        st.error(
+                            f"Summary generation failed: "
+                            f"{summary_response.status_code}"
+                        )
+
+                except requests.exceptions.ConnectionError:
+
+                    st.error(
+                        "FastAPI is not running."
+                    )
+
+                except requests.exceptions.Timeout:
+
+                    st.error(
+                        "The summary request timed out."
+                    )
 # ==========================================================
 # Recruiter Intelligence
 # ==========================================================

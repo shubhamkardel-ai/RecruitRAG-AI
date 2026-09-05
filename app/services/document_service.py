@@ -5,25 +5,10 @@ from qdrant_client import QdrantClient
 from app.ingestion.pipeline import ingest_document
 from app.retrieval.embeddings import EmbeddingService
 from app.retrieval.vector_store import VectorStore
+from app.evaluation.evaluator import CandidateEvaluator
 
 
 class DocumentService:
-    """
-    Handles document ingestion and indexing.
-
-    Flow:
-        Document
-            ↓
-        Load
-            ↓
-        Clean
-            ↓
-        Chunk
-            ↓
-        Embeddings
-            ↓
-        Qdrant
-    """
 
     def __init__(self, client: QdrantClient | None = None):
         self.embedding_service = EmbeddingService()
@@ -31,6 +16,8 @@ class DocumentService:
         self.vector_store = VectorStore(
             client=client
         )
+
+        self.evaluator = CandidateEvaluator()
 
     def index_document(
         self,
@@ -53,12 +40,19 @@ class DocumentService:
             for chunk in chunks
         ]
 
-        # 3. Generate embeddings
+        # 3. Evaluate candidate
+        candidate_text = "\n".join(texts)
+
+        evaluation = self.evaluator.evaluate(
+            candidate_text
+        )
+
+        # 4. Generate embeddings
         embeddings = self.embedding_service.embed_documents(
             texts
         )
 
-        # 4. Create Qdrant payloads
+        # 5. Create Qdrant payloads
         payloads = []
 
         for chunk in chunks:
@@ -72,7 +66,7 @@ class DocumentService:
                 }
             )
 
-        # 5. Store vectors
+        # 6. Store vectors
         self.vector_store.add_documents(
             embeddings=embeddings,
             payloads=payloads,
@@ -83,4 +77,5 @@ class DocumentService:
             "chunks": len(chunks),
             "vectors": len(embeddings),
             "status": "indexed",
+            "evaluation": evaluation,
         }
