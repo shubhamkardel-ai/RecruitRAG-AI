@@ -25,6 +25,9 @@ st.set_page_config(
 if "resume_indexed" not in st.session_state:
     st.session_state.resume_indexed = False
 
+if "candidate_evaluation" not in st.session_state:
+    st.session_state.candidate_evaluation = None
+
 # ==========================================================
 # Application Header
 # ==========================================================
@@ -140,7 +143,88 @@ with left_col:
                         "✅ Resume indexed successfully."
                     )
 
+                    upload_data = response.json()
+
                     st.session_state.resume_indexed = True
+                    st.session_state.candidate_evaluation = upload_data.get(
+                        "evaluation"
+                    )
+
+                    evaluation = st.session_state.candidate_evaluation
+
+                    if evaluation:
+
+                        st.subheader("🎯 Candidate Evaluation")
+
+                        score_col1, score_col2 = st.columns(2)
+
+                        with score_col1:
+                            st.metric(
+                                "Overall Score",
+                                f"{evaluation['total_score']}/{evaluation['max_score']}",
+                            )
+
+                            st.caption(
+                                "Overall candidate fit score"
+                            )
+
+                        with score_col2:
+                            st.metric(
+                                "Recommendation",
+                                evaluation["recommendation"],
+                            )
+
+                            if evaluation["recommendation"] == "Strong Fit":
+                                st.caption("High alignment with the evaluated resume evidence.")
+
+                            elif evaluation["recommendation"] == "Potential Fit":
+                                st.caption("Good potential with some areas requiring review.")
+
+                            elif evaluation["recommendation"] == "Needs Review":
+                                st.caption("Additional recruiter review is recommended.")
+
+                            else:
+                                st.caption("Limited evidence of alignment with the evaluated role.")
+
+                        st.caption(
+                            "AI-assisted candidate evaluation based on resume evidence."
+                        )
+
+                        st.markdown("#### 📊 Evaluation Breakdown")
+
+                        st.caption(
+                            "Resume-based scoring across technical capability, experience, education, "
+                            "certifications, and role relevance."
+                        )
+
+                        scores = evaluation["scores"]
+
+                        for category, score in scores.items():
+                            label = category.replace("_", " ").title()
+
+                            max_score = {
+                                "technical_skills": 20,
+                                "project_experience": 20,
+                                "professional_experience": 20,
+                                "education": 15,
+                                "certifications": 10,
+                                "role_relevance": 15,
+                            }[category]
+
+                            st.write(
+                                f"**{label}** — {score}/{max_score}"
+                            )
+
+                            st.progress(
+                                score / {
+                                    "technical_skills": 20,
+                                    "project_experience": 20,
+                                    "professional_experience": 20,
+                                    "education": 15,
+                                    "certifications": 10,
+                                    "role_relevance": 15,
+                                }[category]
+                            )
 
                 else:
 
