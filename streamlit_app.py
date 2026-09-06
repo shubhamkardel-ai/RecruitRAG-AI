@@ -28,6 +28,9 @@ if "resume_indexed" not in st.session_state:
 if "candidate_evaluation" not in st.session_state:
     st.session_state.candidate_evaluation = None
 
+if "hiring_insights" not in st.session_state:
+    st.session_state.hiring_insights = None
+
 # ==========================================================
 # Application Header
 # ==========================================================
@@ -154,6 +157,60 @@ with left_col:
 
                     if evaluation:
 
+                        st.subheader("🚀 Candidate Hiring Snapshot")
+
+                        snapshot_col1, snapshot_col2 = st.columns(2)
+
+                        with snapshot_col1:
+
+                            st.metric(
+                                "Overall Score",
+                                f"{evaluation['total_score']}/{evaluation['max_score']}",
+                            )
+
+                        with snapshot_col2:
+
+                            st.metric(
+                                "Recommendation",
+                                evaluation["recommendation"],
+                            )
+
+                        snapshot_col3, snapshot_col4 = st.columns(2)
+
+                        with snapshot_col3:
+
+                            st.metric(
+                                "Role Relevance",
+                                f"{evaluation['scores']['role_relevance']}/15",
+                            )
+
+                            st.metric(
+                                "Project Experience",
+                                f"{evaluation['scores']['project_experience']}/20",
+                            )
+
+                            st.metric(
+                                "Education",
+                                f"{evaluation['scores']['education']}/15",
+                            )
+
+                        with snapshot_col4:
+
+                            st.metric(
+                                "Technical Skills",
+                                f"{evaluation['scores']['technical_skills']}/20",
+                            )
+
+                            st.metric(
+                                "Professional Experience",
+                                f"{evaluation['scores']['professional_experience']}/20",
+                            )
+
+                            st.metric(
+                                "Certifications",
+                                f"{evaluation['scores']['certifications']}/10",
+                            )
+
                         st.subheader("🎯 Candidate Evaluation")
 
                         score_col1, score_col2 = st.columns(2)
@@ -189,6 +246,63 @@ with left_col:
                         st.caption(
                             "AI-assisted candidate evaluation based on resume evidence."
                         )
+
+                        st.markdown("#### 🧠 AI Hiring Insights")
+
+                        if st.button(
+                                "Generate Recruiter Hiring Insights",
+                                use_container_width=True,
+                        ):
+
+                            try:
+
+                                with st.spinner(
+                                        "Generating recruiter hiring insights..."
+                                ):
+
+                                    insight_response = requests.post(
+                                        f"{API_URL}/chat/ask",
+                                        json={
+                                            "question": (
+                                                "Generate a concise recruiter hiring assessment "
+                                                "using only the uploaded candidate resume. "
+                                                "Include: key strengths, potential skill gaps, "
+                                                "recommended role, interview focus areas, and "
+                                                "final hiring assessment. "
+                                                "Keep the response professional and recruiter-ready."
+                                            )
+                                        },
+                                        timeout=120,
+                                    )
+
+                                if insight_response.status_code == 200:
+
+                                    insight_data = insight_response.json()
+
+                                    st.session_state.hiring_insights = insight_data["answer"]
+
+                                    st.info(
+                                        st.session_state.hiring_insights
+                                    )
+
+                                else:
+
+                                    st.error(
+                                        f"Hiring insight generation failed: "
+                                        f"{insight_response.status_code}"
+                                    )
+
+                            except requests.exceptions.ConnectionError:
+
+                                st.error(
+                                    "FastAPI is not running."
+                                )
+
+                            except requests.exceptions.Timeout:
+
+                                st.error(
+                                    "The hiring insight request timed out."
+                                )
 
                         st.markdown("#### 📊 Evaluation Breakdown")
 
