@@ -12,6 +12,7 @@ API_URL = os.getenv(
     "http://127.0.0.1:8000"
 )
 
+
 # ==========================================================
 # Page Configuration
 # ==========================================================
@@ -22,6 +23,11 @@ st.set_page_config(
     layout="wide",
 )
 
+
+# ==========================================================
+# Session State
+# ==========================================================
+
 if "resume_indexed" not in st.session_state:
     st.session_state.resume_indexed = False
 
@@ -31,13 +37,16 @@ if "candidate_evaluation" not in st.session_state:
 if "hiring_insights" not in st.session_state:
     st.session_state.hiring_insights = None
 
+
 # ==========================================================
 # Application Header
 # ==========================================================
 
 st.title("🤖 RecruitRAG-AI")
 
-st.subheader("⚡ AI-Powered Recruitment Intelligence Platform")
+st.subheader(
+    "⚡ AI-Powered Recruitment Intelligence Platform"
+)
 
 st.caption(
     "AI-powered recruitment intelligence • "
@@ -46,7 +55,13 @@ st.caption(
 
 st.divider()
 
+
+# ==========================================================
+# System Status
+# ==========================================================
+
 status_col1, status_col2, status_col3 = st.columns(3)
+
 
 with status_col1:
 
@@ -66,13 +81,19 @@ with status_col1:
 
         st.error("🔴 API Offline")
 
+
 with status_col2:
+
     st.info("🔵 RAG Engine Active")
 
+
 with status_col3:
+
     st.info("🔵 AI Assistant Active")
 
+
 st.divider()
+
 
 # ==========================================================
 # Recruiter Workspace
@@ -85,15 +106,19 @@ left_col, right_col = st.columns(
 
 
 # ==========================================================
+# LEFT COLUMN
 # Candidate Resume
 # ==========================================================
 
 with left_col:
 
-    st.subheader("📄 AI-Powered Resume Analysis")
+    st.subheader(
+        "📄 AI-Powered Resume Analysis"
+    )
 
     st.caption(
-        "Upload a candidate resume to unlock AI-powered recruitment insights."
+        "Upload a candidate resume to unlock "
+        "AI-powered recruitment insights."
     )
 
     uploaded_file = st.file_uploader(
@@ -101,6 +126,11 @@ with left_col:
         type=["pdf", "docx", "txt"],
         help="Supported formats: PDF, DOCX, TXT",
     )
+
+
+    # ======================================================
+    # Resume Uploaded
+    # ======================================================
 
     if uploaded_file is not None:
 
@@ -115,9 +145,10 @@ with left_col:
             f"Size: {file_size_kb:.1f} KB"
         )
 
-        # --------------------------------------------------
+
+        # ==================================================
         # Index Resume
-        # --------------------------------------------------
+        # ==================================================
 
         if st.button(
             "🚀 Index Resume",
@@ -127,7 +158,9 @@ with left_col:
 
             try:
 
-                with st.spinner("Processing resume..."):
+                with st.spinner(
+                    "Processing resume..."
+                ):
 
                     response = requests.post(
                         f"{API_URL}/documents/upload",
@@ -140,6 +173,7 @@ with left_col:
                         timeout=120,
                     )
 
+
                 if response.status_code == 200:
 
                     st.success(
@@ -149,148 +183,249 @@ with left_col:
                     upload_data = response.json()
 
                     st.session_state.resume_indexed = True
-                    st.session_state.candidate_evaluation = upload_data.get(
-                        "evaluation"
+
+                    st.session_state.candidate_evaluation = (
+                        upload_data.get("evaluation")
                     )
 
-                    evaluation = st.session_state.candidate_evaluation
+                    evaluation = (
+                        st.session_state.candidate_evaluation
+                    )
+
+
+                    # ======================================
+                    # Recruiter Decision
+                    # ======================================
 
                     if evaluation:
 
-                        st.subheader("🚀 Candidate Hiring Snapshot")
-
-                        snapshot_col1, snapshot_col2 = st.columns(2)
-
-                        with snapshot_col1:
-
-                            st.metric(
-                                "Overall Score",
-                                f"{evaluation['total_score']}/{evaluation['max_score']}",
-                            )
-
-                        with snapshot_col2:
-
-                            st.metric(
-                                "Recommendation",
-                                evaluation["recommendation"],
-                            )
-
-                        snapshot_col3, snapshot_col4 = st.columns(2)
-
-                        with snapshot_col3:
-
-                            st.metric(
-                                "Role Relevance",
-                                f"{evaluation['scores']['role_relevance']}/15",
-                            )
-
-                            st.metric(
-                                "Project Experience",
-                                f"{evaluation['scores']['project_experience']}/20",
-                            )
-
-                            st.metric(
-                                "Education",
-                                f"{evaluation['scores']['education']}/15",
-                            )
-
-                        with snapshot_col4:
-
-                            st.metric(
-                                "Technical Skills",
-                                f"{evaluation['scores']['technical_skills']}/20",
-                            )
-
-                            st.metric(
-                                "Professional Experience",
-                                f"{evaluation['scores']['professional_experience']}/20",
-                            )
-
-                            st.metric(
-                                "Certifications",
-                                f"{evaluation['scores']['certifications']}/10",
-                            )
-
-                        st.subheader("🎯 Candidate Evaluation")
-
-                        score_col1, score_col2 = st.columns(2)
-
-                        with score_col1:
-                            st.metric(
-                                "Overall Score",
-                                f"{evaluation['total_score']}/{evaluation['max_score']}",
-                            )
-
-                            st.caption(
-                                "Overall candidate fit score"
-                            )
-
-                        with score_col2:
-                            st.metric(
-                                "Recommendation",
-                                evaluation["recommendation"],
-                            )
-
-                            if evaluation["recommendation"] == "Strong Fit":
-                                st.caption("High alignment with the evaluated resume evidence.")
-
-                            elif evaluation["recommendation"] == "Potential Fit":
-                                st.caption("Good potential with some areas requiring review.")
-
-                            elif evaluation["recommendation"] == "Needs Review":
-                                st.caption("Additional recruiter review is recommended.")
-
-                            else:
-                                st.caption("Limited evidence of alignment with the evaluated role.")
-
-                        st.caption(
-                            "AI-assisted candidate evaluation based on resume evidence."
+                        st.subheader(
+                            "🎯 Recruiter Decision"
                         )
 
-                        st.markdown("#### 🧠 AI Hiring Insights")
+                        st.caption(
+                            "AI-assisted candidate evaluation "
+                            "based on evidence extracted from "
+                            "the uploaded resume."
+                        )
+
+
+                        decision_col1, decision_col2 = (
+                            st.columns(2)
+                        )
+
+
+                        with decision_col1:
+
+                            st.metric(
+                                "Overall Candidate Score",
+                                f"{evaluation['total_score']}/"
+                                f"{evaluation['max_score']}",
+                            )
+
+
+                        with decision_col2:
+
+                            st.metric(
+                                "Hiring Recommendation",
+                                evaluation["recommendation"],
+                            )
+
+
+                        if (
+                            evaluation["recommendation"]
+                            == "Strong Fit"
+                        ):
+
+                            st.success(
+                                "✅ Strong alignment with the "
+                                "evaluated role and resume evidence."
+                            )
+
+                        elif (
+                            evaluation["recommendation"]
+                            == "Potential Fit"
+                        ):
+
+                            st.warning(
+                                "🟡 Candidate shows good potential "
+                                "but requires additional review."
+                            )
+
+                        elif (
+                            evaluation["recommendation"]
+                            == "Needs Review"
+                        ):
+
+                            st.warning(
+                                "🟠 Additional recruiter review "
+                                "is recommended."
+                            )
+
+                        else:
+
+                            st.error(
+                                "🔴 Limited evidence of alignment "
+                                "with the evaluated role."
+                            )
+
+
+                        # ==================================
+                        # Evaluation Breakdown
+                        # ==================================
+
+                        st.markdown(
+                            "#### 📊 Evaluation Breakdown"
+                        )
+
+                        st.caption(
+                            "Candidate score across technical "
+                            "capability, project experience, "
+                            "professional experience, education, "
+                            "certifications, and role relevance."
+                        )
+
+
+                        scores = evaluation["scores"]
+
+
+                        max_scores = {
+
+                            "technical_skills": 20,
+
+                            "project_experience": 20,
+
+                            "professional_experience": 20,
+
+                            "education": 15,
+
+                            "certifications": 10,
+
+                            "role_relevance": 15,
+
+                        }
+
+
+                        score_col1, score_col2 = (
+                            st.columns(2)
+                        )
+
+
+                        score_items = list(
+                            scores.items()
+                        )
+
+
+                        for index, (
+                            category,
+                            score,
+                        ) in enumerate(score_items):
+
+                            max_score = max_scores[
+                                category
+                            ]
+
+                            label = (
+                                category
+                                .replace("_", " ")
+                                .title()
+                            )
+
+
+                            target_col = (
+                                score_col1
+                                if index % 2 == 0
+                                else score_col2
+                            )
+
+
+                            with target_col:
+
+                                st.write(
+                                    f"**{label}**"
+                                )
+
+                                st.progress(
+                                    score / max_score
+                                )
+
+                                st.caption(
+                                    f"{score}/{max_score}"
+                                )
+
+
+                        # ==================================
+                        # AI Hiring Insights
+                        # ==================================
+
+                        st.markdown(
+                            "#### 🧠 AI Hiring Insights"
+                        )
+
+                        st.caption(
+                            "Generate a recruiter-ready assessment "
+                            "using the indexed candidate resume."
+                        )
+
 
                         if st.button(
-                                "Generate Recruiter Hiring Insights",
-                                use_container_width=True,
+                            "Generate Recruiter Hiring Insights",
+                            use_container_width=True,
                         ):
 
                             try:
 
                                 with st.spinner(
-                                        "Generating recruiter hiring insights..."
+                                    "Generating recruiter hiring insights..."
                                 ):
 
-                                    insight_response = requests.post(
-                                        f"{API_URL}/chat/ask",
-                                        json={
-                                            "question": (
-                                                "Generate a concise recruiter hiring assessment "
-                                                "using only the uploaded candidate resume. "
-                                                "Include: key strengths, potential skill gaps, "
-                                                "recommended role, interview focus areas, and "
-                                                "final hiring assessment. "
-                                                "Keep the response professional and recruiter-ready."
-                                            )
-                                        },
-                                        timeout=120,
+                                    insight_response = (
+                                        requests.post(
+                                            f"{API_URL}/chat/ask",
+                                            json={
+                                                "question": (
+                                                    "Generate a concise "
+                                                    "recruiter hiring assessment "
+                                                    "using only the uploaded "
+                                                    "candidate resume. "
+                                                    "Include: key strengths, "
+                                                    "potential skill gaps, "
+                                                    "recommended role, "
+                                                    "interview focus areas, "
+                                                    "and final hiring assessment. "
+                                                    "Keep the response professional "
+                                                    "and recruiter-ready."
+                                                )
+                                            },
+                                            timeout=120,
+                                        )
                                     )
 
-                                if insight_response.status_code == 200:
 
-                                    insight_data = insight_response.json()
+                                if (
+                                    insight_response.status_code
+                                    == 200
+                                ):
 
-                                    st.session_state.hiring_insights = insight_data["answer"]
+                                    insight_data = (
+                                        insight_response.json()
+                                    )
 
-                                    st.info(
-                                        st.session_state.hiring_insights
+                                    st.session_state.hiring_insights = (
+                                        insight_data["answer"]
+                                    )
+
+                                    st.success(
+                                        "✅ Hiring insights generated."
                                     )
 
                                 else:
 
                                     st.error(
-                                        f"Hiring insight generation failed: "
+                                        "Hiring insight generation failed: "
                                         f"{insight_response.status_code}"
                                     )
+
 
                             except requests.exceptions.ConnectionError:
 
@@ -304,47 +439,18 @@ with left_col:
                                     "The hiring insight request timed out."
                                 )
 
-                        st.markdown("#### 📊 Evaluation Breakdown")
 
-                        st.caption(
-                            "Resume-based scoring across technical capability, experience, education, "
-                            "certifications, and role relevance."
-                        )
-
-                        scores = evaluation["scores"]
-
-                        for category, score in scores.items():
-                            label = category.replace("_", " ").title()
-
-                            max_score = {
-                                "technical_skills": 20,
-                                "project_experience": 20,
-                                "professional_experience": 20,
-                                "education": 15,
-                                "certifications": 10,
-                                "role_relevance": 15,
-                            }[category]
-
-                            st.write(
-                                f"**{label}** — {score}/{max_score}"
-                            )
-
-                            st.progress(
-                                score / {
-                                    "technical_skills": 20,
-                                    "project_experience": 20,
-                                    "professional_experience": 20,
-                                    "education": 15,
-                                    "certifications": 10,
-                                    "role_relevance": 15,
-                                }[category]
-                            )
+                    # ======================================
+                    # Upload Failed
+                    # ======================================
 
                 else:
 
                     st.error(
-                        f"Upload failed: {response.status_code}"
+                        f"Upload failed: "
+                        f"{response.status_code}"
                     )
+
 
             except requests.exceptions.ConnectionError:
 
@@ -358,9 +464,21 @@ with left_col:
                     "The upload request timed out."
                 )
 
-        # --------------------------------------------------
+
+        # ==================================================
+        # Persistent Hiring Insights
+        # ==================================================
+
+        if st.session_state.hiring_insights:
+
+            st.info(
+                st.session_state.hiring_insights
+            )
+
+
+        # ==================================================
         # AI Candidate Summary
-        # --------------------------------------------------
+        # ==================================================
 
         if st.session_state.resume_indexed:
 
@@ -379,21 +497,27 @@ with left_col:
                             f"{API_URL}/chat/ask",
                             json={
                                 "question": (
-                                    "Generate a professional recruiter-ready "
-                                    "candidate summary. Include candidate "
-                                    "overview, experience, technical skills, "
-                                    "projects, education, key strengths, "
-                                    "potential gaps, recommended role, and "
-                                    "overall recruiter assessment. Use only "
-                                    "information available in the uploaded resume."
+                                    "Generate a professional "
+                                    "recruiter-ready candidate "
+                                    "summary. Include candidate "
+                                    "overview, experience, technical "
+                                    "skills, projects, education, "
+                                    "key strengths, potential gaps, "
+                                    "recommended role, and overall "
+                                    "recruiter assessment. Use only "
+                                    "information available in the "
+                                    "uploaded resume."
                                 )
                             },
                             timeout=120,
                         )
 
+
                     if summary_response.status_code == 200:
 
-                        summary_data = summary_response.json()
+                        summary_data = (
+                            summary_response.json()
+                        )
 
                         st.subheader(
                             "✨ AI Candidate Summary"
@@ -406,9 +530,10 @@ with left_col:
                     else:
 
                         st.error(
-                            f"Summary generation failed: "
+                            "Summary generation failed: "
                             f"{summary_response.status_code}"
                         )
+
 
                 except requests.exceptions.ConnectionError:
 
@@ -421,17 +546,23 @@ with left_col:
                     st.error(
                         "The summary request timed out."
                     )
+
+
 # ==========================================================
+# RIGHT COLUMN
 # Recruiter Intelligence
 # ==========================================================
 
 with right_col:
 
-    st.subheader("💬 Recruiter Intelligence")
+    st.subheader(
+        "💬 Recruiter Intelligence"
+    )
 
     st.caption(
         "Ask natural-language questions about the candidate."
     )
+
 
     analysis_mode = st.selectbox(
         "AI Analysis Mode",
@@ -445,11 +576,14 @@ with right_col:
         ],
     )
 
+
     if analysis_mode == "Recruiter Q&A":
 
         question = st.text_area(
             "Recruiter Question",
-            placeholder="Ask anything about the candidate...",
+            placeholder=(
+                "Ask anything about the candidate..."
+            ),
             height=100,
         )
 
@@ -457,9 +591,13 @@ with right_col:
 
         question = st.text_area(
             "Recruiter Question",
-            value=f"Analyze the candidate's {analysis_mode.lower()}.",
+            value=(
+                f"Analyze the candidate's "
+                f"{analysis_mode.lower()}."
+            ),
             height=100,
         )
+
 
     st.caption(
         "Try asking:"
@@ -471,10 +609,11 @@ with right_col:
         "• Does the candidate have Python experience?"
     )
 
+
     if st.button(
-            "🧠 Analyze Candidate",
-            use_container_width=True,
-            type="primary",
+        "🧠 Analyze Candidate",
+        use_container_width=True,
+        type="primary",
     ):
 
         if not question.strip():
@@ -495,12 +634,15 @@ with right_col:
                         f"{API_URL}/chat/ask",
                         json={
                             "question": (
-                                f"AI Analysis Mode: {analysis_mode}\n\n"
-                                f"Recruiter Question: {question}"
+                                f"AI Analysis Mode: "
+                                f"{analysis_mode}\n\n"
+                                f"Recruiter Question: "
+                                f"{question}"
                             )
                         },
                         timeout=120,
                     )
+
 
                 if response.status_code == 200:
 
@@ -517,8 +659,10 @@ with right_col:
                 else:
 
                     st.error(
-                        f"API error: {response.status_code}"
+                        f"API error: "
+                        f"{response.status_code}"
                     )
+
 
             except requests.exceptions.ConnectionError:
 
@@ -532,6 +676,7 @@ with right_col:
                     "The request timed out."
                 )
 
+
 # ==========================================================
 # Footer
 # ==========================================================
@@ -539,5 +684,6 @@ with right_col:
 st.divider()
 
 st.caption(
-    "RecruitRAG-AI · Intelligent Resume Screening & Candidate Insights"
+    "RecruitRAG-AI · Intelligent Resume Screening "
+    "& Candidate Insights"
 )
