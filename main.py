@@ -7,6 +7,7 @@ from app.rag_pipeline import RAGPipeline
 from app.api.routes.documents import create_document_router
 from app.api.routes.chat import create_chat_router
 from app.api.routes.matching import create_matching_router
+from app.api.routes.interview import create_interview_router
 
 
 app = FastAPI(
@@ -75,6 +76,16 @@ matching_router = create_matching_router(
 )
 
 app.include_router(matching_router)
+
+# ==========================================================
+# Interview Intelligence Routes
+# ==========================================================
+
+interview_router = create_interview_router(
+    client=qdrant_client
+)
+
+app.include_router(interview_router)
 
 
 # ==========================================================
