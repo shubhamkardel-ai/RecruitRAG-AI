@@ -547,6 +547,132 @@ with left_col:
                         "The summary request timed out."
                     )
 
+        # ==================================================
+        # Job Description Matching
+        # ==================================================
+
+        if st.session_state.resume_indexed:
+
+            st.divider()
+
+            st.subheader(
+                "🎯 Job Description Matching"
+            )
+
+            st.caption(
+                "Compare the indexed candidate resume "
+                "against a target job description."
+            )
+
+            job_description = st.text_area(
+                "📋 Paste Job Description",
+                placeholder=(
+                    "Paste the target job description here..."
+                ),
+                height=180,
+            )
+
+            if st.button(
+                "🔍 Analyze Job Match",
+                use_container_width=True,
+                type="primary",
+            ):
+
+                if not job_description.strip():
+
+                    st.warning(
+                        "Please paste a job description."
+                    )
+
+                else:
+
+                    try:
+
+                        with st.spinner(
+                            "Analyzing candidate-job match..."
+                        ):
+
+                            match_response = requests.post(
+                                f"{API_URL}/matching/match",
+                                json={
+                                    "job_description": job_description,
+                                },
+                                timeout=120,
+                            )
+
+                        if match_response.status_code == 200:
+
+                            match_data = (
+                                match_response.json()
+                            )
+
+                            st.success(
+                                "✅ Job match analysis completed."
+                            )
+
+                            st.metric(
+                                "Job Match Score",
+                                f"{match_data['match_score']}%",
+                            )
+
+                            st.markdown(
+                                "#### ✅ Matching Skills"
+                            )
+
+                            if match_data["matching_skills"]:
+
+                                st.write(
+                                    ", ".join(
+                                        match_data[
+                                            "matching_skills"
+                                        ]
+                                    )
+                                )
+
+                            else:
+
+                                st.caption(
+                                    "No matching skills identified."
+                                )
+
+                            st.markdown(
+                                "#### ⚠️ Missing Skills"
+                            )
+
+                            if match_data["missing_skills"]:
+
+                                st.write(
+                                    ", ".join(
+                                        match_data[
+                                            "missing_skills"
+                                        ]
+                                    )
+                                )
+
+                            else:
+
+                                st.success(
+                                    "No major missing skills identified."
+                                )
+
+                        else:
+
+                            st.error(
+                                "Job matching failed: "
+                                f"{match_response.status_code}"
+                            )
+
+                    except requests.exceptions.ConnectionError:
+
+                        st.error(
+                            "FastAPI is not running."
+                        )
+
+                    except requests.exceptions.Timeout:
+
+                        st.error(
+                            "The job matching request timed out."
+                        )
 
 # ==========================================================
 # RIGHT COLUMN

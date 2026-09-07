@@ -70,7 +70,9 @@ app.include_router(chat_router)
 # Job Matching Routes
 # ==========================================================
 
-matching_router = create_matching_router()
+matching_router = create_matching_router(
+    client=qdrant_client
+)
 
 app.include_router(matching_router)
 
