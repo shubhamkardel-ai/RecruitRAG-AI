@@ -673,6 +673,95 @@ with left_col:
                         st.error(
                             "The job matching request timed out."
                         )
+# ==================================================
+# AI Interview Intelligence
+# ==================================================
+
+if st.session_state.resume_indexed:
+
+            st.divider()
+
+            st.subheader(
+                "🤖 AI Interview Intelligence"
+            )
+
+            st.caption(
+                "Generate role-specific interview questions "
+                "from the candidate resume and job description."
+            )
+
+            interview_job_description = st.text_area(
+                "📋 Paste Job Description for Interview",
+                placeholder=(
+                    "Paste the target job description here..."
+                ),
+                height=180,
+            )
+
+            if st.button(
+                "🎤 Generate Interview Guide",
+                use_container_width=True,
+                type="primary",
+            ):
+
+                if not interview_job_description.strip():
+
+                    st.warning(
+                        "Please paste a job description."
+                    )
+
+                else:
+
+                    try:
+
+                        with st.spinner(
+                            "Generating AI interview guide..."
+                        ):
+
+                            interview_response = requests.post(
+                                f"{API_URL}/interview/generate",
+                                json={
+                                    "job_description":
+                                        interview_job_description,
+                                },
+                                timeout=180,
+                            )
+
+                        if interview_response.status_code == 200:
+
+                            interview_data = (
+                                interview_response.json()
+                            )
+
+                            st.success(
+                                "✅ Interview guide generated successfully."
+                            )
+
+                            st.markdown(
+                                interview_data[
+                                    "interview_guide"
+                                ]
+                            )
+
+                        else:
+
+                            st.error(
+                                "Interview generation failed: "
+                                f"{interview_response.status_code}"
+                            )
+
+                    except requests.exceptions.ConnectionError:
+
+                        st.error(
+                            "FastAPI is not running."
+                        )
+
+                    except requests.exceptions.Timeout:
+
+                        st.error(
+                            "The interview generation request "
+                            "timed out."
+                        )
 
 # ==========================================================
 # RIGHT COLUMN
