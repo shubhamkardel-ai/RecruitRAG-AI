@@ -1,364 +1,641 @@
-::: {align="center"}
-`<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020617,25:061A3A,55:0B3B60,80:007C91,100:00F7FF&height=280&section=header&text=RecruitRAG-AI&fontSize=62&fontColor=FFFFFF&fontAlignY=38&desc=AI-Powered%20Recruitment%20Intelligence%20Platform&descAlignY=58&descSize=20&animation=fadeIn" width="100%"/>`{=html}
+<div align="center">
 
-`<a href="https://recruitrag-ai-szgzxyf5eum4c9lg4xtvxq.streamlit.app/">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%9A%80_Live_Demo-RecruitRAG--AI-00F7FF?style=for-the-badge" alt="Live Demo"/>`{=html}
-`</a>`{=html}
-`<a href="https://recruitrag-ai-api.onrender.com/docs">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%93%9A_API_Docs-Swagger-0EA5E9?style=for-the-badge" alt="API Docs"/>`{=html}
-`</a>`{=html}
-`<a href="https://github.com/shubhamkardel-ai/RecruitRAG-AI">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%92%BB_Source-GitHub-111827?style=for-the-badge&logo=github" alt="GitHub"/>`{=html}
-`</a>`{=html}
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:020617,35:062B49,70:075985,100:00F7FF&height=260&section=header&text=RecruitRAG-AI&fontSize=60&fontColor=FFFFFF&fontAlignY=38&desc=AI-Powered%20Recruitment%20Intelligence%20Platform&descAlignY=58&descSize=19&animation=fadeIn" width="100%"/>
 
-`<br/>`{=html}
+<br/>
 
-`<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=600&size=22&pause=900&color=00F7FF&center=true&vCenter=true&width=850&lines=Resume+Intelligence+%7C+RAG+%7C+Job+Matching;Candidate+Evaluation+%7C+Interview+Intelligence;FastAPI+%2B+Streamlit+%2B+Qdrant+%2B+Groq;From+Resume+Documents+to+Recruiter+Insights" alt="Typing animation"/>`{=html}
-:::
+<a href="https://recruitrag-ai-szgzxyf5eum4c9lg4xtvxq.streamlit.app/">
+<img src="https://img.shields.io/badge/🚀%20LIVE%20DEMO-00F7FF?style=for-the-badge&logo=streamlit&logoColor=111827" alt="Live Demo"/>
+</a>
 
-------------------------------------------------------------------------
+<a href="https://recruitrag-ai-api.onrender.com/docs">
+<img src="https://img.shields.io/badge/⚡%20API%20DOCS-0EA5E9?style=for-the-badge&logo=fastapi&logoColor=white" alt="API Docs"/>
+</a>
 
-## 🧠 What is RecruitRAG-AI?
+<a href="https://github.com/shubhamkardel-ai/RecruitRAG-AI">
+<img src="https://img.shields.io/badge/💻%20SOURCE-111827?style=for-the-badge&logo=github&logoColor=white" alt="Source Code"/>
+</a>
 
-**RecruitRAG-AI** is an AI-powered recruitment intelligence platform
-that turns candidate resumes into searchable, evaluatable, and
-recruiter-friendly intelligence.
+<br/><br/>
 
-Instead of treating a resume as a static PDF, the platform builds a
-complete pipeline:
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=600&size=20&pause=900&color=00F7FF&center=true&vCenter=true&width=900&lines=Resume+Intelligence;Retrieval-Augmented+Generation;Candidate+Evaluation;Job+Matching;Interview+Intelligence" alt="RecruitRAG-AI capabilities"/>
 
-**Resume → Document Intelligence → Candidate Evaluation → Vector
-Retrieval → RAG → Job Matching → Interview Intelligence**
+<br/><br/>
 
-It combines deterministic recruitment logic with retrieval-augmented
-generation so that AI responses remain grounded in the indexed candidate
-information.
+**Transform resumes into searchable, explainable, recruiter-ready intelligence.**
 
-------------------------------------------------------------------------
+</div>
 
-## ⚡ Platform at a Glance
+---
 
-  -----------------------------------------------------------------------
-  Capability                          What RecruitRAG-AI does
-  ----------------------------------- -----------------------------------
-  📄 Resume Intelligence              Accepts PDF, DOCX, and TXT resumes
+# 🧠 What is RecruitRAG-AI?
 
-  🧩 Document Ingestion               Extracts, cleans, and chunks resume
-                                      content
+RecruitRAG-AI is an **AI-powered recruitment intelligence platform** that helps recruiters understand candidates, search resume information using natural language, evaluate candidate fit, match candidates against job descriptions, and generate role-specific interview intelligence.
 
-  🎯 Candidate Evaluation             Calculates a deterministic
-                                      100-point candidate score
+Instead of treating a resume as a static document, RecruitRAG-AI transforms it into a **searchable candidate knowledge base**.
 
-  🔎 Semantic Retrieval               Searches resume chunks using vector
-                                      similarity
+### The platform combines
 
-  💬 Recruiter RAG                    Answers candidate questions using
-                                      retrieved context
+* 📄 Resume document intelligence
+* 🧠 Retrieval-Augmented Generation
+* 🎯 Deterministic candidate evaluation
+* 🔎 Semantic vector retrieval
+* 💬 Grounded recruiter Q&A
+* 📊 Job description matching
+* 🎤 AI interview intelligence
 
-  🧠 Job Matching                     Compares indexed resume skills
-                                      against a job description
+---
 
-  🎤 Interview Intelligence           Generates role-specific interview
-                                      questions and evaluation points
+# ⚡ The Recruitment Intelligence Pipeline
 
-  ☁️ Production Deployment            FastAPI on Render + Streamlit
-                                      Cloud + Qdrant Cloud
-  -----------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-## 🚀 Core Intelligence
-
-### 01 · Candidate Evaluation
-
-RecruitRAG-AI evaluates an indexed candidate using six deterministic
-dimensions:
-
-  Evaluation Dimension         Weight
-  ------------------------- ---------
-  Technical Skills                 20
-  Project Experience               20
-  Professional Experience          20
-  Education                        15
-  Certifications                   10
-  Role Relevance                   15
-  **Total**                   **100**
-
-### Hiring Recommendation Logic
-
-          Score Recommendation
-  ------------- ------------------
-    **80--100** 🟢 Strong Fit
-     **65--79** 🔵 Potential Fit
-     **50--64** 🟡 Needs Review
-      **0--49** 🔴 Weak Fit
-
-This layer is intentionally deterministic, making the primary candidate
-score explainable and reproducible.
-
-------------------------------------------------------------------------
-
-### 02 · Retrieval-Augmented Generation
-
-The RAG layer transforms resume content into searchable knowledge.
-
-``` mermaid
+```mermaid
 flowchart LR
-    A[Resume PDF DOCX TXT] --> B[Document Extraction]
-    B --> C[Chunking]
-    C --> D[FastEmbed<br/>BAAI/bge-small-en-v1.5]
-    D --> E[384-D Embeddings]
-    E --> F[(Qdrant<br/>Cosine Search)]
-    F --> G[Top-K Relevant Context]
-    G --> H[Groq LLM]
-    H --> I[Grounded Recruiter Answer]
+    A[Candidate Resume] --> B[Document Processing]
+    B --> C[Candidate Evaluation]
+    C --> D[Semantic Embeddings]
+    D --> E[(Qdrant)]
+
+    E --> F[Retrieval]
+    F --> G[Groq LLM]
+    G --> H[Recruiter Intelligence]
+
+    I[Job Description] --> J[Job Matching]
+    H --> J
+
+    J --> K[Interview Intelligence]
 ```
 
-The generation prompt explicitly instructs the assistant to use
-retrieved context, avoid inventing candidate information, and state when
-the requested information is unavailable.
+---
 
-------------------------------------------------------------------------
+# 🖥️ Product Preview
 
-### 03 · Job Description Matching
+The platform provides a complete recruiter workflow through a Streamlit interface.
 
-Recruiters can paste a target job description and compare it against the
-indexed resume.
+![RecruitRAG-AI Dashboard](assets/screenshots/dashboard.png)
 
-The matching engine:
+### Recruiter workflow
 
--   extracts recognized skills from the job description
--   checks those skills against the indexed resume
--   calculates a percentage match
--   separates matching skills from missing skills
+**Upload → Index → Evaluate → Ask → Match → Interview**
 
-**Example production validation:**
+The interface provides live API connectivity, RAG status, AI assistant status, resume processing, recruiter analysis, and candidate decision capabilities.
 
-> **83% Job Match**\
-> Matching: Python, SQL, Pandas, Power BI, Machine Learning\
-> Missing: Docker
+---
 
-------------------------------------------------------------------------
+# 🚀 Core Capabilities
 
-### 04 · AI Interview Intelligence
+| Capability                    | What it does                                                         |
+| ----------------------------- | -------------------------------------------------------------------- |
+| 📄 **Resume Intelligence**    | Processes PDF, DOCX, and TXT resumes                                 |
+| 🧩 **Document Processing**    | Extracts, cleans, and intelligently chunks resume content            |
+| 🎯 **Candidate Evaluation**   | Produces an explainable score out of 100                             |
+| 🔎 **Semantic Retrieval**     | Retrieves relevant resume information using vector similarity        |
+| 💬 **Recruiter Q&A**          | Answers natural-language questions using retrieved candidate context |
+| 📊 **Job Matching**           | Compares candidate skills against a target job description           |
+| 🎤 **Interview Intelligence** | Generates role-specific interview questions                          |
+| ☁️ **Cloud Deployment**       | Runs across Streamlit Cloud, Render, Qdrant Cloud, and Groq          |
 
-RecruitRAG-AI can generate a structured interview guide from the indexed
-resume and target job description.
+---
 
-The guide contains:
+# 🧠 Retrieval-Augmented Generation
 
-1.  **Technical Interview Questions**
-2.  **Project-Based Questions**
-3.  **Experience-Based Questions**
-4.  **Skill-Gap Questions**
-5.  **Behavioral Questions**
-6.  **Interviewer Evaluation Points**
+Traditional keyword search can fail when information is expressed differently.
 
-This connects candidate evidence with the actual requirements of the
-target role.
+For example, a recruiter may ask:
 
-------------------------------------------------------------------------
+> **"Does this candidate have practical experience building APIs?"**
 
-## 🔄 End-to-End Recruitment Workflow
+The relevant evidence might be distributed across projects, work experience, and technical descriptions.
 
-``` mermaid
+RecruitRAG-AI uses **RAG** to retrieve relevant candidate information before asking the LLM to generate a response.
+
+### RAG Flow
+
+```mermaid
+flowchart LR
+    A[Resume] --> B[Text Extraction]
+    B --> C[Cleaning]
+    C --> D[Chunking]
+    D --> E[FastEmbed]
+    E --> F[384-D Embeddings]
+    F --> G[(Qdrant)]
+
+    H[Recruiter Question] --> I[Query Embedding]
+    I --> G
+
+    G --> J[Relevant Context]
+    J --> K[Prompt Construction]
+    K --> L[Groq LLM]
+    L --> M[Grounded Answer]
+```
+
+### Grounding Principles
+
+The generation layer is designed to:
+
+* use retrieved candidate context
+* prioritize resume evidence
+* avoid inventing candidate information
+* answer only from available evidence
+* indicate when requested information is unavailable
+
+---
+
+# 🎯 Candidate Evaluation
+
+RecruitRAG-AI includes a deterministic candidate evaluation engine.
+
+The candidate is evaluated across six dimensions.
+
+| Evaluation Area         |  Weight |
+| ----------------------- | ------: |
+| Technical Skills        |      20 |
+| Project Experience      |      20 |
+| Professional Experience |      20 |
+| Education               |      15 |
+| Certifications          |      10 |
+| Role Relevance          |      15 |
+| **Total**               | **100** |
+
+### Recommendation Logic
+
+|      Score | Recommendation   |
+| ---------: | ---------------- |
+| **80–100** | 🟢 Strong Fit    |
+|  **65–79** | 🔵 Potential Fit |
+|  **50–64** | 🟡 Needs Review  |
+|   **0–49** | 🔴 Weak Fit      |
+
+The primary score is calculated deterministically so the evaluation remains **reproducible and explainable**.
+
+---
+
+# 📊 Candidate Evaluation — Production Result
+
+The deployed application successfully evaluated a candidate with:
+
+```text
+Overall Candidate Score
+98 / 100
+
+Hiring Recommendation
+Strong Fit
+```
+
+![Candidate Evaluation](assets/screenshots/candidate-evaluation.png)
+
+### Evaluation breakdown
+
+```text
+Technical Skills          20 / 20
+Project Experience        20 / 20
+Professional Experience   20 / 20
+Education                 15 / 15
+Certifications            10 / 10
+Role Relevance            13 / 15
+
+Total                     98 / 100
+```
+
+This provides recruiters with both the **overall decision** and the **reasoning structure behind the score**.
+
+---
+
+# 🔍 Recruiter Intelligence
+
+Recruiters can ask natural-language questions about an indexed candidate.
+
+Examples:
+
+```text
+What are the candidate's strongest technical skills?
+```
+
+```text
+What AI/ML projects has the candidate built?
+```
+
+```text
+Does the candidate have Python experience?
+```
+
+```text
+What machine-learning experience is mentioned?
+```
+
+The system retrieves relevant resume chunks and uses them as context for the generated response.
+
+---
+
+# 📊 Job Description Matching
+
+RecruitRAG-AI can compare an indexed candidate against a target job description.
+
+```mermaid
+flowchart LR
+    A[Job Description] --> B[Skill Extraction]
+    C[Candidate Resume] --> D[Candidate Skill Analysis]
+
+    B --> E[Skill Comparison]
+    D --> E
+
+    E --> F[Matching Skills]
+    E --> G[Missing Skills]
+
+    F --> H[Match Score]
+    G --> H
+```
+
+### Matching provides
+
+* Match percentage
+* Matching skills
+* Missing skills
+* Candidate-job alignment
+
+---
+
+# 🎯 Job Match — Production Result
+
+Example AI/ML Engineer job description:
+
+```text
+We are looking for an AI/ML Engineer with strong Python,
+SQL, Pandas, NumPy, Scikit-learn and FastAPI skills.
+
+The candidate should have experience building machine
+learning projects, working with data, developing APIs
+and deploying AI applications.
+```
+
+The system produced:
+
+```text
+Job Match Score
+86%
+```
+
+### Matching Skills
+
+`Python · SQL · Pandas · NumPy · Scikit-learn · Machine Learning`
+
+### Missing Skill
+
+`FastAPI`
+
+![Job Description Matching](assets/screenshots/job-matching.png)
+
+This gives recruiters a quick way to identify **where the candidate aligns and where the skill gaps exist**.
+
+---
+
+# 🎤 AI Interview Intelligence
+
+Once a candidate and target role are available, RecruitRAG-AI can generate a structured interview guide.
+
+```mermaid
 flowchart TD
-    A[Recruiter uploads resume] --> B[FastAPI Document API]
-    B --> C[PDF / DOCX / TXT Extraction]
-    C --> D[Text Chunking]
-    D --> E[Candidate Evaluation]
-    D --> F[FastEmbed]
-    F --> G[(Qdrant Vector Database)]
+    A[Candidate Resume] --> C[Interview Intelligence]
+    B[Job Description] --> C
 
-    G --> H[RAG Recruiter Assistant]
-    G --> I[Job Description Matching]
-    G --> J[Interview Intelligence]
+    C --> D[Technical Questions]
+    C --> E[Project Questions]
+    C --> F[Experience Questions]
+    C --> G[Skill Gap Questions]
+    C --> H[Behavioral Questions]
 
-    I --> K[Match Score + Skill Gaps]
-    J --> L[Interview Guide]
-    H --> M[Grounded Candidate Answers]
-    E --> N[Hiring Recommendation]
+    D --> I[Interview Guide]
+    E --> I
+    F --> I
+    G --> I
+    H --> I
 ```
 
-------------------------------------------------------------------------
+### Generated interview intelligence includes
 
-## 🏗️ Production Architecture
+* Technical questions
+* Project-specific questions
+* Experience questions
+* Skill-gap questions
+* Behavioral questions
+* What-to-listen-for evaluation guidance
 
-``` mermaid
+---
+
+# 🎤 Interview Guide — Production Result
+
+The platform generated a role-specific interview guide for an **AI/ML Engineer** position.
+
+![AI Interview Intelligence](assets/screenshots/interview-intelligence.png)
+
+Example generated areas include:
+
+```text
+1. Technical Interview Questions
+
+2. Project-Based Questions
+
+3. Machine Learning Questions
+
+4. Python / SQL Questions
+
+5. Experience-Based Questions
+
+6. Behavioral Questions
+```
+
+The guide can also provide interviewer guidance on **what to listen for**, helping turn generated questions into a more structured evaluation process.
+
+---
+
+# 🧠 AI Candidate Strengths Insight
+
+RecruitRAG-AI can generate a structured candidate-strengths analysis from retrieved resume evidence.
+
+![Candidate Strengths Insight](assets/screenshots/candidate-strengths.png)
+
+The generated analysis can organize evidence into areas such as:
+
+* Data Analysis & Visualization
+* Machine Learning & Predictive Modeling
+* Business Intelligence & Reporting
+* Technical Toolset
+* Certifications & Continuous Learning
+* Professional Experience
+
+The system also provides source/context references associated with the retrieved evidence.
+
+---
+
+# 🔄 Complete Recruiter Workflow
+
+```mermaid
+flowchart TD
+    A[Recruiter] --> B[Streamlit Application]
+
+    B --> C[Upload Resume]
+    B --> D[Ask Recruiter Question]
+    B --> E[Analyze Job Match]
+    B --> F[Generate Interview Guide]
+
+    C --> G[FastAPI Backend]
+    D --> G
+    E --> G
+    F --> G
+
+    G --> H[Document Processing]
+    G --> I[Candidate Evaluation]
+    G --> J[Semantic Retrieval]
+    G --> K[Job Matching]
+    G --> L[Interview Intelligence]
+
+    J --> M[(Qdrant Cloud)]
+    J --> N[FastEmbed]
+    G --> O[Groq LLM]
+
+    H --> G
+    I --> G
+    M --> J
+    N --> J
+    O --> G
+
+    G --> B
+```
+
+---
+
+# ☁️ Production Architecture
+
+```mermaid
 flowchart LR
-    U[Recruiter] --> S[Streamlit Cloud<br/>Recruiter Dashboard]
-    S --> R[Render<br/>FastAPI Backend]
+    A[Recruiter]
+    B[Streamlit Cloud]
+    C[Render]
+    D[FastAPI]
+    E[(Qdrant Cloud)]
+    F[FastEmbed]
+    G[Groq]
 
-    R --> Q[(Qdrant Cloud<br/>Vector Database)]
-    R --> G[Groq<br/>LLM]
+    A --> B
+    B --> C
+    C --> D
 
-    R --> E[FastEmbed<br/>Embeddings]
-    R --> D[Document Processing]
+    D --> E
+    D --> F
+    D --> G
 
-    Q --> R
-    G --> R
+    E --> D
+    F --> D
+    G --> D
 
-    R --> S
-    S --> U
+    D --> B
 ```
 
 ### Deployment Stack
 
-  Layer               Technology
-  ------------------- ------------------------------------
-  Frontend            Streamlit
-  Backend             FastAPI
-  Vector Database     Qdrant Cloud
-  Local Vector DB     Qdrant Docker
-  Embeddings          FastEmbed · BAAI/bge-small-en-v1.5
-  LLM                 Groq
-  Containerization    Docker
-  Backend Hosting     Render
-  Frontend Hosting    Streamlit Cloud
-  API Documentation   FastAPI / Swagger
+| Layer                | Technology               | Purpose                              |
+| -------------------- | ------------------------ | ------------------------------------ |
+| Frontend             | **Streamlit Cloud**      | Recruiter interface                  |
+| Backend              | **FastAPI**              | API and application orchestration    |
+| Hosting              | **Render**               | Production backend                   |
+| Vector Database      | **Qdrant Cloud**         | Semantic retrieval                   |
+| Embeddings           | **FastEmbed**            | Resume/query embeddings              |
+| Model                | `BAAI/bge-small-en-v1.5` | 384-dimensional embeddings           |
+| LLM                  | **Groq**                 | AI response generation               |
+| Local Infrastructure | **Docker**               | Reproducible development environment |
+| API Docs             | **FastAPI Swagger**      | Interactive API documentation        |
 
-> **Deployment note:** the current Render backend uses the free tier, so
-> the service may sleep after inactivity and require a cold start.
+> **Deployment note:** The current Render backend uses the free tier, so the service can sleep after inactivity and require a cold start.
 
-------------------------------------------------------------------------
+---
 
-## 🧩 Modular Project Architecture
+# 🏗️ Project Architecture
 
-``` text
+The application follows a modular architecture separating core responsibilities.
+
+```text
 RecruitRAG-AI/
-│
-├── app/
-│   ├── api/
-│   │   └── routes/
-│   │       ├── documents.py
-│   │       ├── matching.py
-│   │       └── interview.py
-│   │
-│   ├── evaluation/
-│   │   └── evaluator.py
-│   │
-│   ├── generation/
-│   │   ├── llm.py
-│   │   ├── prompts.py
-│   │   └── response_generator.py
-│   │
-│   ├── ingestion/
-│   │   └── pipeline.py
-│   │
-│   ├── interview/
-│   │   ├── job_interviewer.py
-│   │   └── interview_service.py
-│   │
-│   ├── matching/
-│   │   ├── job_matcher.py
-│   │   └── matching_service.py
-│   │
-│   ├── retrieval/
-│   │   ├── embeddings.py
-│   │   ├── retriever.py
-│   │   └── vector_store.py
-│   │
-│   ├── services/
-│   │   └── document_service.py
-│   │
-│   └── rag_pipeline.py
-│
-├── data/
-│   └── uploads/
-│
-├── Dockerfile
-├── docker-compose.yml
-├── main.py
-├── streamlit_app.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
+
+app/
+    api/
+        routes/
+            documents.py
+            matching.py
+            interview.py
+
+    evaluation/
+        evaluator.py
+
+    generation/
+        llm.py
+        prompts.py
+        response_generator.py
+
+    ingestion/
+        pipeline.py
+
+    interview/
+        job_interviewer.py
+        interview_service.py
+
+    matching/
+        job_matcher.py
+        matching_service.py
+
+    retrieval/
+        embeddings.py
+        retriever.py
+        vector_store.py
+
+    services/
+        document_service.py
+
+    rag_pipeline.py
+
+data/
+    uploads/
+
+Dockerfile
+docker-compose.yml
+main.py
+streamlit_app.py
+requirements.txt
+.env.example
+.gitignore
+README.md
 ```
 
-------------------------------------------------------------------------
+### Design Separation
 
-## 🔌 API Surface
+The system separates:
 
-  -----------------------------------------------------------------------
-  Method                  Endpoint                Purpose
-  ----------------------- ----------------------- -----------------------
-  `POST`                  `/documents/upload`     Upload and index a
-                                                  resume
+**Ingestion**
 
-  `POST`                  `/chat/ask`             Ask grounded questions
-                                                  about indexed content
+→ document extraction
+→ cleaning
+→ chunking
 
-  `POST`                  `/matching/match`       Match resume against a
-                                                  job description
+**Evaluation**
 
-  `POST`                  `/interview/generate`   Generate a
-                                                  role-specific interview
-                                                  guide
+→ candidate scoring
+→ recommendation
 
-  `GET`                   `/docs`                 Interactive Swagger API
-                                                  documentation
-  -----------------------------------------------------------------------
+**Retrieval**
 
-### Example Request
+→ embeddings
+→ vector search
+→ relevant context
 
-``` json
+**Generation**
+
+→ prompt construction
+→ LLM response
+
+**Matching**
+
+→ job skill extraction
+→ candidate comparison
+→ skill gaps
+
+**Interview**
+
+→ role-specific questions
+→ evaluation guidance
+
+---
+
+# 🔌 API
+
+| Method | Endpoint              | Purpose                                 |
+| ------ | --------------------- | --------------------------------------- |
+| `POST` | `/documents/upload`   | Upload and index resume                 |
+| `POST` | `/chat/ask`           | Ask grounded candidate questions        |
+| `POST` | `/matching/match`     | Match candidate against job description |
+| `POST` | `/interview/generate` | Generate interview guide                |
+| `GET`  | `/docs`               | Interactive Swagger documentation       |
+
+### Example
+
+```json
 {
   "job_description": "We are looking for an AI/ML Engineer with strong Python, SQL, Machine Learning, Pandas, NumPy, Scikit-learn and FastAPI skills."
 }
 ```
 
-------------------------------------------------------------------------
+---
 
-## 🛠️ Tech Stack
+# 🧪 Production Validation
 
-::: {align="center"}
-`<img src="https://skillicons.dev/icons?i=python,fastapi,docker,git,github,streamlit&theme=dark" alt="Core technologies"/>`{=html}
+The deployed platform has been tested across the major recruitment workflows.
 
-`<br/>`{=html}`<br/>`{=html}
+| Workflow               | Result                 |
+| ---------------------- | ---------------------- |
+| Resume upload          | ✅ Passed               |
+| PDF extraction         | ✅ Passed               |
+| Resume chunking        | ✅ Passed               |
+| Candidate evaluation   | ✅ 98/100               |
+| Hiring recommendation  | ✅ Strong Fit           |
+| Vector indexing        | ✅ 3 chunks / 3 vectors |
+| RAG Q&A                | ✅ Passed               |
+| Job matching           | ✅ 86%                  |
+| Interview generation   | ✅ Passed               |
+| Streamlit → Render API | ✅ Passed               |
+| Qdrant Cloud retrieval | ✅ Passed               |
 
-`<img src="https://img.shields.io/badge/Qdrant-Vector%20Database-DC2626?style=flat-square&logo=qdrant&logoColor=white"/>`{=html}
-`<img src="https://img.shields.io/badge/FastEmbed-Embeddings-7C3AED?style=flat-square"/>`{=html}
-`<img src="https://img.shields.io/badge/Groq-LLM-111827?style=flat-square"/>`{=html}
-`<img src="https://img.shields.io/badge/PDF-DOCX-TXT-0EA5E9?style=flat-square"/>`{=html}
-:::
+---
 
-------------------------------------------------------------------------
+# 🛠️ Technology Stack
 
-## 💻 Local Setup
+<div align="center">
 
-### 1. Clone the repository
+<img src="https://skillicons.dev/icons?i=python,fastapi,docker,git,github,streamlit&theme=dark" alt="Technology stack"/>
 
-``` bash
+<br/><br/>
+
+<img src="https://img.shields.io/badge/RAG-Generative%20AI-0EA5E9?style=flat-square"/>
+<img src="https://img.shields.io/badge/Qdrant-Vector%20Database-DC2626?style=flat-square&logo=qdrant&logoColor=white"/>
+<img src="https://img.shields.io/badge/FastEmbed-Embeddings-7C3AED?style=flat-square"/>
+<img src="https://img.shields.io/badge/Groq-LLM-111827?style=flat-square"/>
+<img src="https://img.shields.io/badge/Transformers-ML-FFCC00?style=flat-square"/>
+<img src="https://img.shields.io/badge/Generative%20AI-Engineering-0891B2?style=flat-square"/>
+
+</div>
+
+---
+
+# 💻 Run Locally
+
+## 1. Clone the repository
+
+```bash
 git clone https://github.com/shubhamkardel-ai/RecruitRAG-AI.git
 cd RecruitRAG-AI
 ```
 
-### 2. Create a virtual environment
+## 2. Create a virtual environment
 
-``` bash
+```bash
 python -m venv .venv
 ```
 
-### 3. Activate it
+## 3. Activate the environment
 
-**Windows PowerShell**
+### Windows PowerShell
 
-``` powershell
+```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-### 4. Install dependencies
+## 4. Install dependencies
 
-``` bash
+```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure environment variables
+## 5. Configure environment variables
 
-Create `.env` from `.env.example`.
+Create `.env` using `.env.example`.
 
-``` env
+```env
 GROQ_API_KEY=your_groq_api_key
 LLM_MODEL=openai/gpt-oss-120b
 
@@ -366,246 +643,163 @@ QDRANT_URL=
 QDRANT_API_KEY=
 ```
 
-For local development, Qdrant can run through Docker.
+> Never commit real API keys or secrets to GitHub.
 
-### 6. Start Qdrant
+## 6. Start Qdrant
 
-``` bash
+```bash
 docker compose up -d qdrant
 ```
 
-### 7. Start the FastAPI backend
+## 7. Start FastAPI
 
-``` bash
+```bash
 uvicorn main:app --reload --port 8000
 ```
 
-### 8. Start Streamlit
+## 8. Start Streamlit
 
 Open another terminal:
 
-``` bash
+```bash
 streamlit run streamlit_app.py
 ```
 
-The local application will normally be available at:
+### Local Application
 
-``` text
+```text
 http://localhost:8501
 ```
 
-Swagger:
+### Local Swagger
 
-``` text
+```text
 http://localhost:8000/docs
 ```
 
-------------------------------------------------------------------------
+---
 
-## 🐳 Docker
+# 🐳 Docker
 
-The project includes Docker configuration for running the application
-stack.
+Run the complete local environment with:
 
-``` bash
+```bash
 docker compose up --build
 ```
 
-The local development architecture can run:
+Docker provides a reproducible environment for the application infrastructure.
 
--   FastAPI backend
--   Streamlit frontend
--   Qdrant vector database
+---
 
-------------------------------------------------------------------------
+# 🔐 Security
 
-## 🎯 How to Use
+RecruitRAG-AI follows environment-based secret management.
 
-### Step 1 --- Upload a Resume
+* API keys are stored in environment variables.
+* `.env` is excluded from Git.
+* `.env.example` contains placeholders only.
+* Production credentials belong in deployment environment variables.
+* Secrets must never be committed to GitHub.
+* Exposed credentials should be revoked and rotated immediately.
 
-Upload a:
+---
 
--   PDF
--   DOCX
--   TXT
+# 🧠 Engineering Principles
 
-RecruitRAG-AI extracts and chunks the content, evaluates the candidate,
-generates embeddings, and indexes the chunks.
+### Grounded Generation
 
-### Step 2 --- Review Candidate Intelligence
+The LLM receives retrieved candidate context before generating recruiter-facing answers.
 
-The dashboard presents:
+### Deterministic Candidate Evaluation
 
--   candidate score
--   recommendation
--   evaluation breakdown
--   AI hiring insights
--   candidate summary
+The primary candidate score follows a fixed scoring structure rather than relying entirely on free-form LLM judgment.
 
-### Step 3 --- Ask Recruiter Questions
+### Modular AI Architecture
 
-Use the RAG assistant to ask questions such as:
+Retrieval, evaluation, generation, matching, and interview intelligence are separated into independent modules.
 
-``` text
-What are the candidate's technical skills?
-```
+### API-First Backend
 
-``` text
-What projects has the candidate worked on?
-```
+The core recruitment intelligence is exposed through FastAPI and consumed by the Streamlit frontend.
 
-``` text
-What Python experience is mentioned in the resume?
-```
+### Production-Oriented Development
 
-### Step 4 --- Compare With a Job
+The system supports local Docker infrastructure as well as cloud deployment.
 
-Paste a job description to receive:
+---
 
--   match percentage
--   matching skills
--   missing skills
+# 🔮 Roadmap
 
-### Step 5 --- Generate an Interview Guide
+Planned future improvements:
 
-Paste a target job description and generate a structured interview guide
-based on the indexed candidate.
+* Multi-resume candidate comparison
+* Recruiter ranking and shortlist generation
+* Advanced semantic job matching
+* Candidate skill-gap analytics
+* Interview answer evaluation
+* Recruiter conversation memory
+* Document deduplication and versioning
+* Authentication and role-based access control
+* Observability and monitoring
+* RAG evaluation datasets
+* Automated retrieval and generation benchmarks
 
-------------------------------------------------------------------------
+---
 
-## 📊 Production Validation
+# 🌐 Live Project
 
-The deployed platform has been validated across its major recruitment
-workflows.
+<div align="center">
 
-  Test                         Result
-  ---------------------------- -------------------------
-  Resume upload                ✅ Passed
-  PDF extraction               ✅ Passed
-  Resume chunking              ✅ Passed
-  Candidate evaluation         ✅ 98/100 · Strong Fit
-  Vector indexing              ✅ 3 chunks / 3 vectors
-  RAG question answering       ✅ Passed
-  Job matching                 ✅ 83% validation
-  Interview guide generation   ✅ Passed
-  Streamlit → Render API       ✅ Passed
-  Qdrant Cloud retrieval       ✅ Passed
+## Try RecruitRAG-AI
 
-### Example Evaluation
+<a href="https://recruitrag-ai-szgzxyf5eum4c9lg4xtvxq.streamlit.app/">
+<img src="https://img.shields.io/badge/🚀%20LAUNCH%20LIVE%20APP-00F7FF?style=for-the-badge&logo=streamlit&logoColor=111827" alt="Launch Live App"/>
+</a>
 
-**Candidate Score:** `98 / 100`\
-**Recommendation:** `Strong Fit`
+<br/><br/>
 
-### Example Match
+<a href="https://recruitrag-ai-api.onrender.com/docs">
+<img src="https://img.shields.io/badge/⚡%20EXPLORE%20API-0EA5E9?style=for-the-badge&logo=fastapi&logoColor=white" alt="Explore API"/>
+</a>
 
-**Job Match:** `83%`
+<a href="https://github.com/shubhamkardel-ai/RecruitRAG-AI">
+<img src="https://img.shields.io/badge/💻%20VIEW%20SOURCE-111827?style=for-the-badge&logo=github&logoColor=white" alt="View Source"/>
+</a>
 
-**Matching skills:** Python · SQL · Pandas · Power BI · Machine Learning
+</div>
 
-**Missing skill:** Docker
+---
 
-------------------------------------------------------------------------
+# 👨‍💻 Author
 
-## 🔐 Security
+<div align="center">
 
-RecruitRAG-AI follows a basic production-oriented secret-management
-approach:
-
--   API keys are stored in environment variables.
--   `.env` is excluded from Git.
--   `.env.example` contains placeholders only.
--   Production secrets belong to the backend deployment environment.
--   Secrets should never be committed to GitHub.
--   If a real credential is ever exposed, it should be revoked and
-    rotated immediately.
-
-------------------------------------------------------------------------
-
-## 🧠 Engineering Principles
-
-RecruitRAG-AI is designed around several practical engineering
-principles:
-
-**Grounded AI**\
-LLM responses are generated from retrieved candidate context rather than
-unrestricted model knowledge.
-
-**Deterministic Evaluation**\
-The primary candidate score is rule-based and reproducible.
-
-**Modular Architecture**\
-Ingestion, evaluation, retrieval, generation, matching, and interview
-logic are separated into dedicated services.
-
-**API-First Backend**\
-Recruitment intelligence is exposed through FastAPI endpoints and can be
-consumed by the Streamlit frontend.
-
-**Production-Aware Design**\
-The project separates local development infrastructure from cloud
-deployment infrastructure.
-
-------------------------------------------------------------------------
-
-## 🔮 Future Evolution
-
-These are planned directions, not current features:
-
--   Multi-resume candidate comparison
--   Recruiter ranking and shortlist workflows
--   Advanced semantic job matching
--   Candidate skill-gap analytics
--   Interview answer evaluation
--   Recruiter conversation memory
--   Better document deduplication and versioning
--   Authentication and role-based access
--   Observability and production monitoring
--   Evaluation datasets and automated RAG quality benchmarks
-
-------------------------------------------------------------------------
-
-## 🌐 Live Project
-
-::: {align="center"}
-### 🚀 RecruitRAG-AI
-
-`<a href="https://recruitrag-ai-szgzxyf5eum4c9lg4xtvxq.streamlit.app/">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%96%A5%EF%B8%8F_Open_Live_App-00F7FF?style=for-the-badge&logo=streamlit&logoColor=111827" alt="Open Live App"/>`{=html}
-`</a>`{=html}
-
-`<a href="https://recruitrag-ai-api.onrender.com/docs">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%94%8C_Open_API-0EA5E9?style=for-the-badge&logo=fastapi&logoColor=white" alt="Open API"/>`{=html}
-`</a>`{=html}
-
-`<a href="https://github.com/shubhamkardel-ai/RecruitRAG-AI">`{=html}
-`<img src="https://img.shields.io/badge/%F0%9F%92%BB_View_Source-111827?style=for-the-badge&logo=github&logoColor=white" alt="View Source"/>`{=html}
-`</a>`{=html}
-:::
-
-------------------------------------------------------------------------
-
-## 👨‍💻 Author
-
-::: {align="center"}
-### **Shubham Kardel**
+### Shubham Kardel
 
 **Aspiring AI/ML Engineer · Python Developer · GenAI Builder**
 
-`<a href="https://github.com/shubhamkardel-ai">`{=html}
-`<img src="https://img.shields.io/badge/GitHub-shubhamkardel--ai-111827?style=for-the-badge&logo=github"/>`{=html}
-`</a>`{=html}
+<br/>
 
-`<a href="https://www.linkedin.com/in/shubham-kardel-303356312/">`{=html}
-`<img src="https://img.shields.io/badge/LinkedIn-Shubham%20Kardel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>`{=html}
-`</a>`{=html}
-:::
+<a href="https://github.com/shubhamkardel-ai">
+<img src="https://img.shields.io/badge/GitHub-shubhamkardel--ai-111827?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+</a>
 
-------------------------------------------------------------------------
+<a href="https://www.linkedin.com/in/shubham-kardel-303356312/">
+<img src="https://img.shields.io/badge/LinkedIn-Shubham%20Kardel-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+</a>
 
-::: {align="center"}
-`<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=500&size=18&pause=1200&color=00F7FF&center=true&vCenter=true&width=750&lines=Build+with+Purpose.;Retrieve+with+Context.;Generate+with+Grounding.;Engineer+for+Reality." alt="Closing animation"/>`{=html}
+<br/><br/>
 
-`<br/>`{=html}
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=500&size=18&pause=1200&color=00F7FF&center=true&vCenter=true&width=750&lines=Build+with+Purpose.;Retrieve+with+Context.;Generate+with+Grounding.;Engineer+for+Reality." alt="Closing animation"/>
 
-`<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00F7FF,35:007C91,70:061A3A,100:020617&height=130&section=footer&animation=fadeIn" width="100%"/>`{=html}
-:::
+</div>
+
+---
+
+<div align="center">
+
+**RecruitRAG-AI**
+
+*From candidate documents to grounded recruitment intelligence.*
+
+</div>
