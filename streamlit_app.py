@@ -2,6 +2,21 @@ import os
 import html
 import requests
 import streamlit as st
+import re
+
+
+def clean_ai_response(text):
+    """Clean common HTML formatting artifacts from AI responses."""
+    text = html.unescape(text or "")
+
+    # Convert HTML line breaks to new lines
+    text = re.sub(r"(?i)<br\s*/?>", "\n", text)
+
+    # Remove wrapper HTML tags, such as div and p
+    text = re.sub(r"(?i)</?(div|p|span)\b[^>]*>", "", text)
+
+    return text.strip()
+
 
 
 # ==========================================================
@@ -471,43 +486,19 @@ with left_col:
                         "The hiring insight request timed out."
                     )
 
-
             if st.session_state.hiring_insights:
-
-                insight_text = html.escape(
-                    st.session_state.hiring_insights
+                st.markdown(
+                    "### 🧠 Recruiter Assessment"
                 )
+
 
                 st.markdown(
-                    f"""
-                    <div style="
-                        background:#111820;
-                        border:1px solid #00E5FF;
-                        border-radius:12px;
-                        padding:20px;
-                        margin-top:12px;
-                    ">
-                        <div style="
-                            font-size:14px;
-                            font-weight:700;
-                            color:#00E5FF;
-                            margin-bottom:12px;
-                        ">
-                            🧠 Recruiter Assessment
-                        </div>
-
-                        <div style="
-                            color:#E6EDF3;
-                            font-size:14px;
-                            line-height:1.7;
-                            white-space:pre-wrap;
-                        ">
-                            {insight_text}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
+                    clean_ai_response(
+                        st.session_state.hiring_insights
+                    ),
+                    unsafe_allow_html=False,
                 )
+
 
 
             # ==================================================
@@ -540,18 +531,34 @@ with left_col:
                             f"{API_URL}/chat/ask",
                             json={
                                 "question": (
-                                    "Generate a professional "
-                                    "recruiter-ready candidate "
-                                    "summary. Include candidate "
-                                    "overview, experience, "
-                                    "technical skills, projects, "
-                                    "education, key strengths, "
-                                    "potential gaps, recommended "
-                                    "role, and overall recruiter "
-                                    "assessment. Use only "
-                                    "information available in "
-                                    "the uploaded resume."
+                                    "Create a professional recruiter intelligence report using only the uploaded resume. "
+                                    "Do not invent facts or qualifications. "
+                                    "Use this exact structure with Markdown headings:\n\n"
+                                    "## Candidate Overview\n"
+                                    "Write a short 2-3 sentence overview.\n\n"
+                                    "## Professional Experience\n"
+                                    "Use bullet points for roles, employers, dates, and responsibilities when available.\n\n"
+                                    "## Technical Skills\n"
+                                    "Group the skills into relevant categories using bullet points.\n\n"
+                                    "## Projects\n"
+                                    "Use bullet points for project names, technologies, and demonstrated outcomes.\n\n"
+                                    "## Education\n"
+                                    "List qualifications, institutions, dates, and grades only when available.\n\n"
+                                    "## Certifications\n"
+                                    "Use bullet points for certifications explicitly listed in the resume.\n\n"
+                                    "## Key Strengths\n"
+                                    "Use evidence-based bullet points.\n\n"
+                                    "## Potential Gaps\n"
+                                    "Mention only limitations supported by the resume; say 'Not established by the resume' when appropriate.\n\n"
+                                    "## Recommended Roles\n"
+                                    "Suggest relevant entry-level roles based on demonstrated skills.\n\n"
+                                    "## Overall Recruiter Assessment\n"
+                                    "Write a concise, balanced conclusion.\n\n"
+                                    "Do not use tables, HTML tags, or pipe-separated rows. "
+                                    "Keep the report concise, readable, and professional."
                                 )
+
+
                             },
                             timeout=120,
                         )
@@ -591,12 +598,96 @@ with left_col:
                         "The summary request timed out."
                     )
 
-
             if st.session_state.candidate_summary:
-
-                st.info(
+                summary = clean_ai_response(
                     st.session_state.candidate_summary
                 )
+
+                summary = (
+                    summary
+                    .replace("<br />", "\n")
+                    .replace("<br/>", "\n")
+                    .replace("<br>", "\n")
+                    .replace("<BR>", "\n")
+                    .replace("<BR/>", "\n")
+                    .replace("<BR />", "\n")
+                )
+
+                # Clean up Markdown table formatting
+                summary_lines = summary.splitlines()
+                cleaned_lines = []
+
+                for line in summary_lines:
+                    stripped_line = line.strip()
+
+                    # Remove Markdown table separator rows
+                    if stripped_line and all(
+                            char in "|-: " for char in stripped_line
+                    ):
+                        continue
+
+
+                    # Convert table rows into readable text
+                    if "|" in line:
+                        cells = [
+                            cell.strip()
+                            for cell in line.strip().strip("|").split("|")
+                        ]
+
+                        cells = [
+                            cell for cell in cells if cell
+                        ]
+
+                        if len(cells) >= 2:
+                            line = f"**{cells[0]}:** " + " — ".join(cells[1:])
+
+
+                    # Clean HTML line breaks and decode HTML entities
+                    line = html.unescape(line)
+
+                    line = (
+                        line.replace("<br />", "\n")
+                        .replace("<br/>", "\n")
+                        .replace("<br>", "\n")
+                        .replace("<BR />", "\n")
+                        .replace("<BR/>", "\n")
+                        .replace("<BR>", "\n")
+                    )
+
+                    cleaned_lines.append(line)
+
+                summary = "\n\n".join(
+                    line for line in cleaned_lines if line.strip()
+                )
+
+
+                st.markdown("---")
+                st.markdown("### 📋 Candidate Profile")
+
+                with st.container(border=True):
+                    st.markdown(
+                        """
+                        <div style="
+                            padding: 8px 0 16px 0;
+                            border-bottom: 1px solid #263746;
+                            margin-bottom: 18px;
+                        ">
+                            <h3 style="margin:0; color:#00CFE8;">
+                                Candidate Intelligence Report
+                            </h3>
+                            <p style="
+                                color:#9CA3AF;
+                                font-size:13px;
+                                margin:6px 0 0 0;
+                            ">
+                                AI-generated summary based on the uploaded resume
+                            </p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    st.markdown(summary)
 
 
             # ==================================================
@@ -833,7 +924,8 @@ with left_col:
                 )
 
                 st.markdown(
-                    st.session_state.interview_guide
+                    st.session_state.interview_guide.replace("<br>", "\n"),
+                    unsafe_allow_html=False
                 )
 
 
@@ -941,9 +1033,12 @@ with right_col:
                         f"🎯 AI {analysis_mode} Insight"
                     )
 
-                    st.info(
-                        data["answer"]
+
+                    st.markdown(
+                        clean_ai_response(data["answer"]),
+                        unsafe_allow_html=False,
                     )
+
 
                 else:
 
@@ -951,7 +1046,6 @@ with right_col:
                         f"API error: "
                         f"{response.status_code}"
                     )
-
 
             except requests.exceptions.ConnectionError:
 
